@@ -1,0 +1,766 @@
+(dp1
+S'output'
+p2
+S'<class \'psycopg2.ProgrammingError\'> relation "compound_record" does not exist\nLINE 1: INSERT INTO compound_record(smiles,molsource,created_on,crea...\n                    ^\n'
+p3
+sS'layer'
+p4
+S'/home/www-data/web2py/applications/naturar/controllers/data.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\n# this file is released under public domain and you can use without limitations\n\n#########################################################################\n## This is a sample controller\n## - index is the default action of any application\n## - user is required for authentication and authorization\n## - download is for downloading files uploaded in the db (does streaming)\n#########################################################################\nfrom rdkit import Chem\nfrom rdkit.Chem import Draw\nfrom rdkit.Chem import AllChem\nimport os.path \n\nsize = (120, 120)  # Smaller figures than the default.\n\ndef create_molimage(smiles,imagepath):\n    """\n    check if the image was created if not it is generated, and return the path\n    """\n    mol = Chem.AllChem.MolFromSmiles(smiles)\n    imagepath = "applications/naturar/static/"+imagepath\n    Chem.Draw.MolToFile(mol,imagepath,size=(200,200))\n\n\n\ndef upload_molprocessing(form):\n        print form.vars\n        if form.vars.smiles:\n            pass\n        else:\n            form.errors.smiles = T(\'You must introduce an structure\')  \n\n\n@auth.requires_membership(\'authorized\')\ndef upload():\n    """\n    action to upload compounds\n    """\n    form = SQLFORM(db.compound_record)\n    if form.process(onvalidation=upload_molprocessing).accepted:\n        name = form.vars.visitor_name\n        molid = form.vars.id\n        #update imagepath in db\n        form.vars.imagepath = settings.imagedir+str(molid)+".png"\n        row = db(db.compound_record.id==int(molid)).select().first()\n        row.update_record(imagepath=form.vars.imagepath)\n        #create molecular image from smiles\n        create_molimage(form.vars.smiles,form.vars.imagepath)\n        response.flash = T("Compound was uploaded correctly")\n    return dict(form=form)\n    \n\ndef list_molecules():\n    """\n    show compound like a image grid\n    """\n    if len(request.args): page=int(request.args[0])\n    else: page=0\n    items_per_page=5\n    limitby=(page*items_per_page,(page+1)*items_per_page+1)\n    rows=db().select(db.compound_record.ALL,limitby=limitby)\n    return dict(rows=rows,page=page,items_per_page=items_per_page)\n\n\ndef user():\n    """\n    exposes:\n    http://..../[app]/default/user/login\n    http://..../[app]/default/user/logout\n    http://..../[app]/default/user/register\n    http://..../[app]/default/user/profile\n    http://..../[app]/default/user/retrieve_password\n    http://..../[app]/default/user/change_password\n    http://..../[app]/default/user/manage_users (requires membership in\n    use @auth.requires_login()\n        @auth.requires_membership(\'group name\')\n        @auth.requires_permission(\'read\',\'table name\',record_id)\n    to decorate functions that need access control\n    """\n    return dict(form=auth())\n\n\n@cache.action()\ndef download():\n    """\n    allows downloading of uploaded files\n    http://..../[app]/default/download/[filename]\n    """\n    return response.download(request, db)\n\n\ndef call():\n    """\n    exposes services. for example:\n    http://..../[app]/default/call/jsonrpc\n    decorate with @services.jsonrpc the functions to expose\n    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv\n    """\n    return service()\n\n\n\nresponse._vars=response._caller(upload)\n'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__module__'
+p12
+S"'psycopg2'"
+p13
+sS'__getslice__'
+p14
+S"<method-wrapper '__getslice__' of ProgrammingError object>"
+p15
+sS'__str__'
+p16
+S"<method-wrapper '__str__' of ProgrammingError object>"
+p17
+sS'__reduce__'
+p18
+S'<built-in method __reduce__ of ProgrammingError object>'
+p19
+sS'__dict__'
+p20
+S'{}'
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of ProgrammingError object>'
+p23
+sS'__weakref__'
+p24
+S'None'
+p25
+sS'__init__'
+p26
+S"<method-wrapper '__init__' of ProgrammingError object>"
+p27
+sS'__setattr__'
+p28
+S"<method-wrapper '__setattr__' of ProgrammingError object>"
+p29
+sS'__reduce_ex__'
+p30
+S'<built-in method __reduce_ex__ of ProgrammingError object>'
+p31
+sS'__new__'
+p32
+S'<built-in method __new__ of type object>'
+p33
+sS'diag'
+p34
+S'<psycopg2.extensions.Diagnostics object>'
+p35
+sS'__format__'
+p36
+S'<built-in method __format__ of ProgrammingError object>'
+p37
+sS'__class__'
+p38
+S"<class 'psycopg2.ProgrammingError'>"
+p39
+sS'pgerror'
+p40
+S'\'ERROR:  relation "compound_record" does not exis...lsource,created_on,crea...\\n                    ^\\n\''
+p41
+sS'__doc__'
+p42
+S"'Error related to database programming (SQL error, table not found etc).'"
+p43
+sS'__getitem__'
+p44
+S"<method-wrapper '__getitem__' of ProgrammingError object>"
+p45
+sS'__setstate__'
+p46
+S'<built-in method __setstate__ of ProgrammingError object>'
+p47
+sS'__getattribute__'
+p48
+S"<method-wrapper '__getattribute__' of ProgrammingError object>"
+p49
+sS'args'
+p50
+S'(\'relation "compound_record" does not exist\\nLINE 1...lsource,created_on,crea...\\n                    ^\\n\',)'
+p51
+sS'__subclasshook__'
+p52
+S'<built-in method __subclasshook__ of type object>'
+p53
+sS'pgcode'
+p54
+S"'42P01'"
+p55
+sS'__unicode__'
+p56
+S'<built-in method __unicode__ of ProgrammingError object>'
+p57
+sS'cursor'
+p58
+S'<cursor object at 0x7fbdf5c13050; closed: 0>'
+p59
+sS'__delattr__'
+p60
+S"<method-wrapper '__delattr__' of ProgrammingError object>"
+p61
+sS'__repr__'
+p62
+S"<method-wrapper '__repr__' of ProgrammingError object>"
+p63
+sS'__hash__'
+p64
+S"<method-wrapper '__hash__' of ProgrammingError object>"
+p65
+ssS'evalue'
+p66
+S'relation "compound_record" does not exist\nLINE 1: INSERT INTO compound_record(smiles,molsource,created_on,crea...\n                    ^\n'
+p67
+sS'request'
+p68
+cgluon.html
+XML_unpickle
+p69
+(S's\xba]\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>data</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">csrftoken</td><td style="vertical-align:top;">:</td><td><div>Odp5UXcgjutXMq7E8Hmd9Wzc9IO1IPxM<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_admin</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-e8d48d7e-d432-47a4-b915-0966519cf21b<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_naturar</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-e917720c-80b3-41aa-9425-7112aa73e51b<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_welcome</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-788b1458-2b73-4dff-8733-721a5c0f4b99<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_LENGTH</td><td style="vertical-align:top;">:</td><td><div>608</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_TYPE</td><td style="vertical-align:top;">:</td><td><div>multipart/form-data; boundary=----WebKitFormBoundarytBsnzHdX0sWmK6Qm</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">DOCUMENT_ROOT</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CACHE_CONTROL</td><td style="vertical-align:top;">:</td><td><div>max-age=0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONTENT_LENGTH</td><td style="vertical-align:top;">:</td><td><div>608</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONTENT_TYPE</td><td style="vertical-align:top;">:</td><td><div>multipart/form-data; boundary=----WebKitFormBoundarytBsnzHdX0sWmK6Qm</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>csrftoken=Odp5UXcgjutXMq7E8Hmd9Wzc9IO1IPxM; session_id_welcome=127.0.0.1-788b1458-2b73-4dff-8733-721a5c0f4b99; session_id_admin=127.0.0.1-e8d48d7e-d432-47a4-b915-0966519cf21b; session_id_naturar=127.0.0.1-e917720c-80b3-41aa-9425-7112aa73e51b</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>localhost</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ORIGIN</td><td style="vertical-align:top;">:</td><td><div>https://localhost</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_REFERER</td><td style="vertical-align:top;">:</td><td><div>https://localhost/naturar/data/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_UPGRADE_INSECURE_REQUESTS</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>60599</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>POST</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_URI</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>nginx/1.4.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">UWSGI_SCHEME</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/www-data/web2py/applications/naturar/&#x27;, &#x27;/home/www-data/web2py/applications/admin/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_length</td><td style="vertical-align:top;">:</td><td><div>608</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_type</td><td style="vertical-align:top;">:</td><td><div>multipart/form-data; boundary=----WebKitFormBoundarytBsnzHdX0sWmK6Qm</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">document_root</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cache_control</td><td style="vertical-align:top;">:</td><td><div>max-age=0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_content_length</td><td style="vertical-align:top;">:</td><td><div>608</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_content_type</td><td style="vertical-align:top;">:</td><td><div>multipart/form-data; boundary=----WebKitFormBoundarytBsnzHdX0sWmK6Qm</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>csrftoken=Odp5UXcgjutXMq7E8Hmd9Wzc9IO1IPxM; session_id_welcome=127.0.0.1-788b1458-2b73-4dff-8733-721a5c0f4b99; session_id_admin=127.0.0.1-e8d48d7e-d432-47a4-b915-0966519cf21b; session_id_naturar=127.0.0.1-e917720c-80b3-41aa-9425-7112aa73e51b</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>localhost</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_origin</td><td style="vertical-align:top;">:</td><td><div>https://localhost</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_referer</td><td style="vertical-align:top;">:</td><td><div>https://localhost/naturar/data/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_upgrade_insecure_requests</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>gandalf</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>Gandalf</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>60599</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>POST</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>nginx/1.4.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.node</td><td style="vertical-align:top;">:</td><td><div>Gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.version</td><td style="vertical-align:top;">:</td><td><div>2.0.11</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_node</td><td style="vertical-align:top;">:</td><td><div>Gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_version</td><td style="vertical-align:top;">:</td><td><div>2.0.11</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.11.2-stable+timestamp.2015.05.30.16.33.24</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7fbdf8833d20&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7fbe028aeae0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7fbdf8833d20&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7fbe028aeae0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/applications/naturar/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/www-data/web2py/applications/naturar/&#x27;, &#x27;/home/www-data/web2py/applications/admin/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>gandalf</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>Gandalf</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.11.2-stable+timestamp.2015.05.30.16.33.24</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_sheduler</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2015, 8, 4, 15, 38, 27, 849831)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_args</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_extension</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2015, 8, 4, 18, 38, 27, 849845)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x7fbdf5bf5c10&gt;</div></td></tr></table></div>'
+tRp70
+sS'frames'
+p71
+(lp72
+(dp73
+S'file'
+p74
+S'/home/www-data/web2py/gluon/restricted.py'
+p75
+sS'dump'
+p76
+(dp77
+S'environment'
+p78
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AllChem': <module 'rdkit.Chem.AllChem' from '/usr/lib/python2.7/dist-packages/rdkit/Chem/AllChem.pyc'>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, ...}"
+p79
+sS'ccode'
+p80
+S'<code object <module> at 0x7fbdf56df830, file "/...plications/naturar/controllers/data.py", line 10>'
+p81
+ssS'lnum'
+p82
+I227
+sS'lines'
+p83
+(dp84
+I224
+S'            ccode = code'
+p85
+sI225
+S'        else:'
+p86
+sI226
+S'            ccode = compile2(code, layer)'
+p87
+sI227
+S'        exec ccode in environment'
+p88
+sI228
+S'    except HTTP:'
+p89
+sI229
+S'        raise'
+p90
+sI230
+S'    except RestrictedError:'
+p91
+sI231
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p92
+sI222
+S'    try:'
+p93
+sI223
+S'        if isinstance(code, types.CodeType):'
+p94
+ssS'call'
+p95
+S"(code='# -*- coding: utf-8 -*-\\n# this file is released ...ice()\\n\\n\\n\\nresponse._vars=response._caller(upload)\\n', environment={'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AllChem': <module 'rdkit.Chem.AllChem' from '/usr/lib/python2.7/dist-packages/rdkit/Chem/AllChem.pyc'>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, ...}, layer='/home/www-data/web2py/applications/naturar/controllers/data.py')"
+p96
+sS'func'
+p97
+S'restricted'
+p98
+sa(dp99
+g74
+S'/home/www-data/web2py/applications/naturar/controllers/data.py'
+p100
+sg76
+(dp101
+sg82
+I104
+sg83
+(dp102
+I96
+S'    http://..../[app]/default/call/jsonrpc'
+p103
+sI97
+S'    decorate with @services.jsonrpc the functions to expose'
+p104
+sI98
+S'    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv'
+p105
+sI99
+S'    """'
+p106
+sI100
+S'    return service()'
+p107
+sI101
+S''
+sI102
+S''
+sI93
+S'def call():'
+p108
+sI94
+S'    """'
+p109
+sI95
+S'    exposes services. for example:'
+p110
+ssg95
+S'()'
+p111
+sg97
+S'<module>'
+p112
+sa(dp113
+g74
+S'/home/www-data/web2py/gluon/globals.py'
+p114
+sg76
+(dp115
+S'self'
+p116
+S'undefined'
+p117
+sS'f'
+S'<function upload>'
+p118
+ssg82
+I412
+sg83
+(dp119
+I416
+S"        self.generic_patterns = ['*']"
+p120
+sI407
+S"        self.flash = ''            # used by the default view layout"
+p121
+sI408
+S'        self.meta = Storage()      # used by web2py_ajax.html'
+p122
+sI409
+S'        self.menu = []             # used by the default view layout'
+p123
+sI410
+S'        self.files = []            # used by web2py_ajax.html'
+p124
+sI411
+S'        self._vars = None'
+p125
+sI412
+S'        self._caller = lambda f: f()'
+p126
+sI413
+S'        self._view_environment = None'
+p127
+sI414
+S'        self._custom_commit = None'
+p128
+sI415
+S'        self._custom_rollback = None'
+p129
+ssg95
+S'(f=<function upload>)'
+p130
+sg97
+S'<lambda>'
+p131
+sa(dp132
+g74
+S'/home/www-data/web2py/gluon/tools.py'
+p133
+sg76
+(dp134
+S'action'
+p135
+S'<function upload>'
+p136
+sS'a'
+S'()'
+p137
+sS'b'
+g21
+ssg82
+I3583
+sg83
+(dp138
+I3584
+S'            f.__doc__ = action.__doc__'
+p139
+sI3585
+S'            f.__name__ = action.__name__'
+p140
+sI3586
+S'            f.__dict__.update(action.__dict__)'
+p141
+sI3587
+S'            return f'
+p142
+sI3578
+S'                    flag = condition'
+p143
+sI3579
+S'                if not flag:'
+p144
+sI3580
+S'                    current.session.flash = self.messages.access_denied'
+p145
+sI3581
+S'                    return call_or_redirect('
+p146
+sI3582
+S'                        self.settings.on_failed_authorization)'
+p147
+sI3583
+S'                return action(*a, **b)'
+p148
+ssg95
+S'(*a=(), **b={})'
+p149
+sg97
+S'f'
+sa(dp150
+g74
+S'/home/www-data/web2py/applications/naturar/controllers/data.py'
+p151
+sg76
+(dp152
+S'form.process'
+p153
+S'<bound method SQLFORM.process of <gluon.sqlhtml.SQLFORM object>>'
+p154
+sS').accepted'
+p155
+g117
+sS'onvalidation'
+p156
+g117
+sS'form'
+p157
+S'<gluon.sqlhtml.SQLFORM object>'
+p158
+sS'global upload_molprocessing'
+p159
+S'<function upload_molprocessing>'
+p160
+ssg82
+I41
+sg83
+(dp161
+I36
+S'def upload():'
+p162
+sI37
+S'    """'
+p163
+sI38
+S'    action to upload compounds'
+p164
+sI39
+S'    """'
+p165
+sI40
+S'    form = SQLFORM(db.compound_record)'
+p166
+sI41
+S'    if form.process(onvalidation=upload_molprocessing).accepted:'
+p167
+sI42
+S'        name = form.vars.visitor_name'
+p168
+sI43
+S'        molid = form.vars.id'
+p169
+sI44
+S'        #update imagepath in db'
+p170
+sI45
+S'        form.vars.imagepath = settings.imagedir+str(molid)+".png"'
+p171
+ssg95
+S'()'
+p172
+sg97
+S'upload'
+p173
+sa(dp174
+g74
+S'/home/www-data/web2py/gluon/html.py'
+p175
+sg76
+(dp176
+S'self'
+p177
+S'<gluon.sqlhtml.SQLFORM object>'
+p178
+sS'self.validate'
+p179
+S'<bound method SQLFORM.validate of <gluon.sqlhtml.SQLFORM object>>'
+p180
+sS'kwargs'
+p181
+S"{'dbio': True, 'onvalidation': <function upload_molprocessing>}"
+p182
+ssg82
+I2301
+sg83
+(dp183
+I2304
+S'    REDIRECT_JS = "window.location=\'%s\';return false"'
+p184
+sI2305
+S''
+sI2296
+S''
+sI2297
+S''
+sI2298
+S'        """'
+p185
+sI2299
+S"        kwargs['dbio'] = kwargs.get('dbio', True)"
+p186
+sI2300
+S'                                    # necessary for SQLHTML forms'
+p187
+sI2301
+S'        self.validate(**kwargs)'
+p188
+sI2302
+S'        return self'
+p189
+sI2303
+S''
+ssg95
+S"(self=<gluon.sqlhtml.SQLFORM object>, **kwargs={'dbio': True, 'onvalidation': <function upload_molprocessing>})"
+p190
+sg97
+S'process'
+p191
+sa(dp192
+g74
+S'/home/www-data/web2py/gluon/html.py'
+p193
+sg76
+(dp194
+S'self'
+p195
+S'<gluon.sqlhtml.SQLFORM object>'
+p196
+sS'self.accepts'
+p197
+S'<bound method SQLFORM.accepts of <gluon.sqlhtml.SQLFORM object>>'
+p198
+sS'kwargs'
+p199
+S"{'dbio': True, 'onvalidation': <function upload_molprocessing>, 'request_vars': <Storage {'smiles': 'CCCCCCCCCCCCCCCCNN', 'molso...puesto1', '_formname': 'compound_record/create'}>, 'session': <Storage {'last_query': 'db.settings.id>0', '_au...gin]': ['f9bf029e-f0a3-4dfc-a5a8-90fc886c1c8c']}>}"
+p200
+ssg82
+I2238
+sg83
+(dp201
+I2240
+S'                if next:'
+p202
+sI2241
+S'                    current.session.flash = message_onsuccess'
+p203
+sI2242
+S'                else:'
+p204
+sI2233
+S"        for key in ('message_onsuccess', 'message_onfailure', 'onsuccess',"
+p205
+sI2234
+S"                    'onfailure', 'next', 'message_onchange', 'onchange'):"
+p206
+sI2235
+S'            if key in kwargs:'
+p207
+sI2236
+S'                del kwargs[key]'
+p208
+sI2237
+S''
+sI2238
+S'        if self.accepts(**kwargs):'
+p209
+sI2239
+S"            if onsuccess == 'flash':"
+p210
+ssg95
+S"(self=<gluon.sqlhtml.SQLFORM object>, **kwargs={'dbio': True, 'onvalidation': <function upload_molprocessing>, 'request_vars': <Storage {'smiles': 'CCCCCCCCCCCCCCCCNN', 'molso...puesto1', '_formname': 'compound_record/create'}>, 'session': <Storage {'last_query': 'db.settings.id>0', '_au...gin]': ['f9bf029e-f0a3-4dfc-a5a8-90fc886c1c8c']}>})"
+p211
+sg97
+S'validate'
+p212
+sa(dp213
+g74
+S'/home/www-data/web2py/gluon/sqlhtml.py'
+p214
+sg76
+(dp215
+S'self.vars.id'
+p216
+S'None'
+p217
+sS'fields'
+p218
+S"{'created_by': 1L, 'created_on': datetime.datetime(2015, 8, 4, 15, 38, 27, 849831), 'molsource': 'fuente1', 'name': 'compuesto1', 'smiles': 'CCCCCCCCCCCCCCCCNN'}"
+p219
+sS'self'
+p220
+S'<gluon.sqlhtml.SQLFORM object>'
+p221
+sS'self.vars'
+p222
+S"<Storage {'smiles': 'CCCCCCCCCCCCCCCCNN', 'molsource': 'fuente1', 'name': 'compuesto1'}>"
+p223
+sS'self.table.insert'
+p224
+S'<bound method Table.insert of <Table compound_re...lsource,created_on,created_by,smiles,imagepath)>>'
+p225
+sS'self.table'
+p226
+S'<Table compound_record (id,name,molsource,created_on,created_by,smiles,imagepath)>'
+p227
+ssg82
+I1688
+sg83
+(dp228
+I1683
+S'                    self.vars.id = self.record[self.id_field_name]'
+p229
+sI1684
+S'                    if fields:'
+p230
+sI1685
+S'                        self.table._db(self.table._id == self.record['
+p231
+sI1686
+S'                                       self.id_field_name]).update(**fields)'
+p232
+sI1687
+S'                else:'
+p233
+sI1688
+S'                    self.vars.id = self.table.insert(**fields)'
+p234
+sI1689
+S'        self.accepted = ret'
+p235
+sI1690
+S'        return ret'
+p236
+sI1691
+S''
+sI1692
+S'    AUTOTYPES = {'
+p237
+ssg95
+S"(self=<gluon.sqlhtml.SQLFORM object>, request_vars=<Storage {'smiles': 'CCCCCCCCCCCCCCCCNN', 'molso...puesto1', '_formname': 'compound_record/create'}>, session=<Storage {'last_query': 'db.settings.id>0', '_au...gin]': ['f9bf029e-f0a3-4dfc-a5a8-90fc886c1c8c']}>, formname='compound_record/create', keepvalues=False, onvalidation=<function upload_molprocessing>, dbio=True, hideerror=False, detect_record_change=False, **kwargs={})"
+p238
+sg97
+S'accepts'
+p239
+sa(dp240
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/objects.py'
+p241
+sg76
+(dp242
+S'self._listify'
+p243
+S'<bound method Table._listify of <Table compound_...lsource,created_on,created_by,smiles,imagepath)>>'
+p244
+sS'fields'
+p245
+S"{'created_by': 1L, 'created_on': datetime.datetime(2015, 8, 4, 15, 38, 27, 849831), 'molsource': 'fuente1', 'name': 'compuesto1', 'smiles': 'CCCCCCCCCCCCCCCCNN'}"
+p246
+sS'self'
+p247
+S'<Table compound_record (id,name,molsource,created_on,created_by,smiles,imagepath)>'
+p248
+sS'ret'
+p249
+g117
+sS'self._db._adapter'
+p250
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p251
+sS'self._db._adapter.insert'
+p252
+S'<bound method PostgreSQLAdapter.insert of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p253
+sS'self._db'
+p254
+S'<DAL uri="postgres:******@localhost/emolecules">'
+p255
+ssg82
+I691
+sg83
+(dp256
+I686
+S'    def insert(self, **fields):'
+p257
+sI687
+S'        fields = self._defaults(fields)'
+p258
+sI688
+S'        self._attempt_upload(fields)'
+p259
+sI689
+S'        if any(f(fields) for f in self._before_insert):'
+p260
+sI690
+S'            return 0'
+p261
+sI691
+S'        ret = self._db._adapter.insert(self, self._listify(fields))'
+p262
+sI692
+S'        if ret and self._after_insert:'
+p263
+sI693
+S'            fields = Row(fields)'
+p264
+sI694
+S'            [f(fields, ret) for f in self._after_insert]'
+p265
+sI695
+S'        return ret'
+p266
+ssg95
+S"(self=<Table compound_record (id,name,molsource,created_on,created_by,smiles,imagepath)>, **fields={'created_by': 1L, 'created_on': datetime.datetime(2015, 8, 4, 15, 38, 27, 849831), 'molsource': 'fuente1', 'name': 'compuesto1', 'smiles': 'CCCCCCCCCCCCCCCCNN'})"
+p267
+sg97
+S'insert'
+p268
+sa(dp269
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p270
+sg76
+(dp271
+S'e'
+S'ProgrammingError(\'relation "compound_record" doe...ce,created_on,crea...\\n                    ^\\n\',)'
+p272
+ssg82
+I731
+sg83
+(dp273
+I726
+S'            self.execute(query)'
+p274
+sI727
+S'        except Exception:'
+p275
+sI728
+S'            e = sys.exc_info()[1]'
+p276
+sI729
+S"            if hasattr(table,'_on_insert_error'):"
+p277
+sI730
+S'                return table._on_insert_error(table,fields,e)'
+p278
+sI731
+S'            raise e'
+p279
+sI732
+S"        if hasattr(table, '_primarykey'):"
+p280
+sI733
+S'            mydict = dict([(k[0].name, k[1]) for k in fields if k[0].name in table._primarykey])'
+p281
+sI734
+S'            if mydict != {}:'
+p282
+sI735
+S'                return mydict'
+p283
+ssg95
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, table=<Table compound_record (id,name,molsource,created_on,created_by,smiles,imagepath)>, fields=[(<pydal.objects.Field object>, 'CCCCCCCCCCCCCCCCNN'), (<pydal.objects.Field object>, 'fuente1'), (<pydal.objects.Field object>, datetime.datetime(2015, 8, 4, 15, 38, 27, 849831)), (<pydal.objects.Field object>, 1L), (<pydal.objects.Field object>, 'compuesto1')])"
+p284
+sg97
+g268
+sasS'pyver'
+p285
+S'Python 2.7.6: /usr/local/bin/uwsgi (prefix: /usr)'
+p286
+sS'session'
+p287
+g69
+(S's\r\x0c\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">auth</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">expiration</td><td style="vertical-align:top;">:</td><td><div>3600</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">hmac_key</td><td style="vertical-align:top;">:</td><td><div>93643388-a044-4fb0-8361-1118c2639e22</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">last_visit</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2015, 8, 4, 15, 38, 22, 155820)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remember_me</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">user</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">address</td><td style="vertical-align:top;">:</td><td><div>2111</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">city</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">email</td><td style="vertical-align:top;">:</td><td><div>karadahian@hotmail.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">first_name</td><td style="vertical-align:top;">:</td><td><div>marcus</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">id</td><td style="vertical-align:top;">:</td><td><div>1L</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">last_name</td><td style="vertical-align:top;">:</td><td><div>gromhol</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">phone</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">registration_id</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">registration_key</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">reset_password_key</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">zip</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">user_groups</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">2</td><td style="vertical-align:top;">:</td><td><div>authorized</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">last_orderby</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">last_query</td><td style="vertical-align:top;">:</td><td><div>db.settings.id&gt;0</div></td></tr></table></div>'
+tRp288
+sS'etype'
+p289
+S"<class 'psycopg2.ProgrammingError'>"
+p290
+sS'date'
+p291
+S'Tue Aug  4 15:38:27 2015'
+p292
+sS'response'
+p293
+g69
+(S's\xda?\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x7fbdf5a9fdc0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_naturar</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-e917720c-80b3-41aa-9425-7112aa73e51b<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap3_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">google_analytics_id</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">logo</td><td style="vertical-align:top;">:</td><td><div><a class="navbar-brand" href="http://www.web2py.com/" id="web2py-logo"><b>web<span>2</span>py</b>&trade;&nbsp;</a></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div><table><tr><td><div>Inicio</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/naturar/default/index</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Mis Sitios</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/site</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Esta Aplicaci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Design</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/design/naturar</div></td></tr></table></div></td></tr><tr><td><div><li class="divider"></li></div></td></tr><tr><td><div><table><tr><td><div>Controlador</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/naturar/controllers/data.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Vista</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/naturar/views/data/upload.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Modelo BDD</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/naturar/models/db.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Modelo "menu"</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/naturar/models/menu.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Config.ini</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/naturar/private/appconfig.ini</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Dise\xc3\xb1o de p\xc3\xa1gina</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/naturar/views/layout.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Hoja de estilo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/naturar/static/css/web2py-bootstrap3.css</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Base de datos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/naturar/appadmin/index</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Errores</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/errors/naturar</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Acerca de</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/about/naturar</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>web2py.com</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Descargas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/download</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Soporte</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/support</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Demostraci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/demo_admin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Ejemplos R\xc3\xa1pidos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/examples/default/examples</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>FAQ</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/AlterEgo</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>V\xc3\xaddeos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/videos/</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Aplicaciones Libres</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/appliances</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/plugins</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recetas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2pyslices.com/</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Documentaci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Online book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book</div></td></tr></table></div></td></tr><tr><td><div><li class="divider"></li></div></td></tr><tr><td><div><table><tr><td><div>Prefacio</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/00</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Introducci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/01</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Python</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/02</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Resumen</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/03</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>El N\xc3\xbacleo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/04</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Las Vistas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/05</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Base de datos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/06</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Formularios y validadores</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/07</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Correo electr\xc3\xb3nico y SMS</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/08</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Control de Acceso</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/09</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Servicios</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/10</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recetas AJAX</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/11</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Componentes y Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/12</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recetas de despliegue</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/13</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Otras Recetas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/14</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Helping web2py</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/15</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Buy web2py\'s book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://stores.lulu.com/web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Comunidad</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Grupos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/usergroups</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Twitter</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://twitter.com/web2py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Chat en vivo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://webchat.freenode.net/?channels=web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">author</td><td style="vertical-align:top;">:</td><td><div>Your Name &lt;you@example.com&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">description</td><td style="vertical-align:top;">:</td><td><div>a cool new app</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generator</td><td style="vertical-align:top;">:</td><td><div>Web2py Web Framework</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">keywords</td><td style="vertical-align:top;">:</td><td><div>web2py, python, framework</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^data/\\w+\\.py$</div></td></tr><tr><td><div>^data/upload/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_key</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;/home/www-data/web2py/applications/naturar/sessions/1f4/152/127.0.0.1-e917720c-80b3-41aa-9425-7112aa73e51b&#x27;, mode &#x27;rb+&#x27; at 0x7fbdf56adf60&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/applications/naturar/sessions/127.0.0.1-e917720c-80b3-41aa-9425-7112aa73e51b</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>a3519dea71db81a351d1ece1622f7692</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-e917720c-80b3-41aa-9425-7112aa73e51b</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_locked</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">subtitle</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">title</td><td style="vertical-align:top;">:</td><td><div>Naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>data/upload.html</div></td></tr></table></div>'
+tRp294
+sS'locals'
+p295
+(dp296
+S'query'
+p297
+S'"INSERT INTO compound_record(smiles,molsource,cre...015-08-04 15:38:27\',1,\'compuesto1\') RETURNING id;"'
+p298
+sS'self'
+p299
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p300
+sS'e'
+S'ProgrammingError(\'relation "compound_record" doe...ce,created_on,crea...\\n                    ^\\n\',)'
+p301
+sS'fields'
+p302
+S"[(<pydal.objects.Field object>, 'CCCCCCCCCCCCCCCCNN'), (<pydal.objects.Field object>, 'fuente1'), (<pydal.objects.Field object>, datetime.datetime(2015, 8, 4, 15, 38, 27, 849831)), (<pydal.objects.Field object>, 1L), (<pydal.objects.Field object>, 'compuesto1')]"
+p303
+sS'table'
+p304
+S'<Table compound_record (id,name,molsource,created_on,created_by,smiles,imagepath)>'
+p305
+sssS'traceback'
+p306
+S'Traceback (most recent call last):\n  File "/home/www-data/web2py/gluon/restricted.py", line 227, in restricted\n    exec ccode in environment\n  File "/home/www-data/web2py/applications/naturar/controllers/data.py", line 104, in <module>\n  File "/home/www-data/web2py/gluon/globals.py", line 412, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/www-data/web2py/gluon/tools.py", line 3583, in f\n    return action(*a, **b)\n  File "/home/www-data/web2py/applications/naturar/controllers/data.py", line 41, in upload\n    if form.process(onvalidation=upload_molprocessing).accepted:\n  File "/home/www-data/web2py/gluon/html.py", line 2301, in process\n    self.validate(**kwargs)\n  File "/home/www-data/web2py/gluon/html.py", line 2238, in validate\n    if self.accepts(**kwargs):\n  File "/home/www-data/web2py/gluon/sqlhtml.py", line 1688, in accepts\n    self.vars.id = self.table.insert(**fields)\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/objects.py", line 691, in insert\n    ret = self._db._adapter.insert(self, self._listify(fields))\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py", line 731, in insert\n    raise e\nProgrammingError: relation "compound_record" does not exist\nLINE 1: INSERT INTO compound_record(smiles,molsource,created_on,crea...\n                    ^\n\n'
+p307
+s.

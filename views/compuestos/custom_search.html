@@ -1,0 +1,42 @@
+{{extend 'layout.html'}}
+{{block head}}
+{{super}}
+<script>
+ 
+function phoneSrch(){
+    var srch ='contact.prime_phone contains '+'"'+jQuery('#joephone').val()+'"';
+    $("#w2p_keywords").val(srch);
+}
+function lnameSrch(){
+    var srch ='contact.l_name starts with '+'"'+jQuery('#joelname').val()+'"';
+    $("#w2p_keywords").val(srch);
+}
+ 
+$(document).ready(function(){
+  // Make the Grid Standard Search Input hidden  
+  $("#w2p_keywords").prop("type", "hidden");   
+ 
+  // Insert the Custom Search Input elements after 
+  //     the Standard Search Input ("#w2p_keywords")
+  //     using jQuery .insertAfter().
+  //     This prevents them from showing up on Edit or View pages.
+  //     Insert them in reverse order of them appearing on the page.
+  var input2Str  = '<div class="joeinputclass" style="padding-bottom:10px;" >';
+  input2Str += '<span class="joelabelclass" >Primary Phone contains: ';
+  input2Str += '</span><input name="joephone" id="joephone" type="text" ';
+  input2Str += 'onchange="phoneSrch()" style="width:150px;" ><br/></div>';
+  $(input2Str).insertAfter("#w2p_keywords");
+  var input1Str  = '<div class="joeinputclass" style="padding-bottom:10px;">';
+  input1Str += '<span class="joelabelclass" style="padding-right:18px;" >';
+  input1Str += 'Last Name starts with: </span><input name="joelname" ';
+  input1Str += 'id="joelname" type="text"  onchange="lnameSrch()" ';
+  input1Str += 'style="width:150px;" ></div>';
+  $(input1Str).insertAfter("#w2p_keywords");
+});
+ 
+</script>
+{{end}}
+<h2>Contacts</h2>
+<div id="theweb2pygrid">
+{{=grid}}
+</div>

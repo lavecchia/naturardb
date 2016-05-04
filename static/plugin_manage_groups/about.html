@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>About: plugin_manage_groups</title>
+</head>
+
+<body>
+<h2>Web2py plugin: plugin_manage_groups</h2>
+
+<p>
+(C) Zvolsky<br />
+zvolsky@seznam.cz, mirek.zvolsky@gmail.com,<br />
+github.com/zvolsky/plugin_manage_groups
+</p>
+
+<ul>
+  <li>Auto-<b>create the 'admin' group</b> and <b>make the first user its member</b>.</li>
+  <li>Allow <b>creating new groups</b> via (app)/plugin_manage_groups/group/(new-group-name).</li>
+  <li>Allow <b>add and delete memberships</b> to the group at (app)/plugin_manage_groups/group/(group-name).<br />
+(For the 'admin' group there is shortcut: (app)/plugin_manage_groups)</li>
+  <li>Links to switch managed groups at (app)/plugin_manage_groups/group/(group-name).</li>
+  <li><b>Deleting of empty groups</b> at same page.</li>
+  <li>Adaptive with small or large count of users/members.</li>
+  <li>Non default table names for auth are allowed.</li>
+</ul>
+
+<h3>Configuration</h3>
+<p>Configuration is not necessary, but possible with the PluginManager,<br />
+i.e. set <b>plugins.manage_groups.(configuration-parameter)=(value)</b> in model db.py
+<small>(or other, alphabetically after db.py but before plugin_.py)</small></p>
+
+<p>Configuration parameters and their defaults:</p>
+<table>
+<tr><td>first_admin</td><td>True</td><td><small>if admin group will be auto-created and the 1st user made admin member</small></td></tr>
+<tr><td>admin_group</td><td>'admin'</td><td><small>name of the admin group</small></td></tr>
+<tr><td>create</td><td>True</td><td><small>if new groups can be created when navigating to plugin_manage_groups/group/(group_name)</small></td></tr>
+<tr><td>limit_dense_rows</td><td>11</td><td><small>when less users/members, it will output each user on separate line</small></td></tr>
+<tr><td>limit_hide_users</td><td>61</td><td><small>when so many or more users, they will be not listed and are selectable with the html input field</small></td></tr>
+</table>
+
+</body>
+</html>

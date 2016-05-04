@@ -1,0 +1,659 @@
+timestamp: 2016-04-07T08:52:31.709773
+CREATE TABLE auth_user(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(512),
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512),
+    address TEXT,
+    phone TEXT,
+    picture VARCHAR(512),
+    rearchdescription TEXT,
+    additionalinfo TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:32.691236
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:32.950351
+CREATE TABLE auth_membership(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:33.250086
+CREATE TABLE auth_permission(
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE,
+    name VARCHAR(512),
+    table_name VARCHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2016-04-07T08:52:33.525371
+CREATE TABLE auth_event(
+    id SERIAL PRIMARY KEY,
+    time_stamp TIMESTAMP,
+    client_ip VARCHAR(512),
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    origin VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:33.751376
+CREATE TABLE auth_cas(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    service VARCHAR(512),
+    ticket VARCHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2016-04-07T08:52:34.072478
+CREATE TABLE settings(
+    id SERIAL PRIMARY KEY,
+    imagedir VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:34.285448
+CREATE TABLE location(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    country VARCHAR(512),
+    state VARCHAR(512),
+    city VARCHAR(512),
+    place VARCHAR(512),
+    latitude FLOAT8,
+    longitude FLOAT8,
+    yahoowoeid INTEGER,
+    googleplaceid VARCHAR(512),
+    placetypename VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:34.601564
+CREATE TABLE doc(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    journal VARCHAR(512),
+    year TIMESTAMP,
+    volume INTEGER,
+    issue INTEGER,
+    firstpage INTEGER,
+    lastpage INTEGER,
+    doi VARCHAR(512),
+    pubmed_id VARCHAR(512),
+    title TEXT,
+    doctype VARCHAR(512),
+    authors VARCHAR(512),
+    abstract TEXT,
+    url TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:34.843138
+CREATE TABLE compound(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    iupacname VARCHAR(512),
+    inchi VARCHAR(512),
+    inchikey VARCHAR(512),
+    isosmiles VARCHAR(512),
+    cansmiles VARCHAR(512),
+    imagepath TEXT,
+    addinfo TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:35.168724
+CREATE TABLE compound_doc(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:35.418974
+CREATE TABLE structure(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    molstructure mol,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:35.727638
+CREATE TABLE structuredescriptor(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    methodname VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:36.011505
+CREATE TABLE structure_descriptor(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    structuredescriptor_id INTEGER REFERENCES structuredescriptor (id) ON DELETE CASCADE,
+    structure_id INTEGER REFERENCES structure (id) ON DELETE CASCADE,
+    descriptorvalue VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:36.253061
+CREATE TABLE synonymtype(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    synonymtype VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:36.620185
+CREATE TABLE synonym(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    synonymtype_id INTEGER REFERENCES synonymtype (id) ON DELETE CASCADE,
+    synonymname VARCHAR(512),
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:37.055792
+CREATE TABLE classification(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    classificationname VARCHAR(512),
+    classificationdescription TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:37.795595
+CREATE TABLE compound_classification(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    classification_id INTEGER REFERENCES classification (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:37.929125
+CREATE TABLE chemicalclass(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    classname_en VARCHAR(512),
+    classname_es VARCHAR(512),
+    classdescription TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:38.212587
+CREATE TABLE compound_chemicalclass(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    chemicalclass_id INTEGER REFERENCES chemicalclass (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:38.270931
+CREATE TABLE isomer(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    compound1_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    compound2_id INTEGER REFERENCES compound (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:38.338234
+CREATE TABLE compoundproperty(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    molecularweight NUMERIC(10,4),
+    molecularformula VARCHAR(512),
+    molecularvolume NUMERIC(10,3),
+    logp NUMERIC(10,4),
+    tpsa NUMERIC(10,4),
+    hbd INTEGER,
+    hba INTEGER,
+    numrotatable INTEGER,
+    numring INTEGER,
+    numn INTEGER,
+    numo INTEGER,
+    nums INTEGER,
+    numro5violation INTEGER
+);
+success!
+timestamp: 2016-04-07T08:52:38.430063
+CREATE TABLE extraproperty(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    extrapropertyname_en VARCHAR(512),
+    extrapropertyname_es VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:38.513578
+CREATE TABLE compound_extraproperty(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    extraproperty_id INTEGER REFERENCES extraproperty (id) ON DELETE CASCADE,
+    extrapropertyvalue VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:38.605755
+CREATE TABLE source(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    scientificname VARCHAR(512),
+    sourcekingdom VARCHAR(512),
+    sourcefamily VARCHAR(512),
+    sourcegenus VARCHAR(512),
+    sourcespecies VARCHAR(512),
+    variety VARCHAR(512),
+    ethnomedicinalinfo TEXT,
+    dbname VARCHAR(512),
+    idfromdb VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:38.688610
+CREATE TABLE sourceimage(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    sourceimage VARCHAR(512),
+    credit VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:38.923062
+CREATE TABLE nativename(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    nativename VARCHAR(512),
+    culture VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:39.230758
+CREATE TABLE commonname(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    commonname VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:39.506480
+CREATE TABLE medicinal(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    medicinaluse_en VARCHAR(512),
+    medicinaluse_es VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:39.673237
+CREATE TABLE source_medicinal(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    medicinal_id INTEGER REFERENCES medicinal (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:39.831619
+CREATE TABLE food(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    fooduse_en VARCHAR(512),
+    fooduse_es VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:40.074806
+CREATE TABLE source_food(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    food_id INTEGER REFERENCES food (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:40.207350
+CREATE TABLE otheruse(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    otherusename VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:40.585162
+CREATE TABLE source_otheruse(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    otheruse_id INTEGER REFERENCES otheruse (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:40.832232
+CREATE TABLE source_location(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    location_id INTEGER REFERENCES location (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:40.949134
+CREATE TABLE source_doc(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:41.141369
+CREATE TABLE message(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    messagetitle VARCHAR(512),
+    messagebody TEXT,
+    usersent_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    userreceiver_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    date TIMESTAMP
+);
+success!
+timestamp: 2016-04-07T08:52:41.341777
+CREATE TABLE researchgroup(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    reseachname VARCHAR(512),
+    institution VARCHAR(512),
+    webpage VARCHAR(512),
+    email VARCHAR(512),
+    telephone VARCHAR(512),
+    address VARCHAR(512),
+    location_id INTEGER REFERENCES location (id) ON DELETE CASCADE,
+    logo VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:41.691190
+CREATE TABLE user_reseach(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    researchgroup_id INTEGER REFERENCES researchgroup (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:41.955635
+CREATE TABLE user_doc(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:42.175254
+CREATE TABLE bookmark(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:42.384113
+CREATE TABLE partused(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    partname_en VARCHAR(512),
+    partname_es VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:42.700692
+CREATE TABLE extract(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE,
+    location_id INTEGER REFERENCES location (id) ON DELETE CASCADE,
+    partused_id INTEGER REFERENCES partused (id) ON DELETE CASCADE,
+    extractpreparation TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:42.877001
+CREATE TABLE extract_doc(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    extract_id INTEGER REFERENCES extract (id) ON DELETE CASCADE,
+    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:43.041091
+CREATE TABLE compound_extract(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    extract_id INTEGER REFERENCES extract (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    compoundamount FLOAT8
+);
+success!
+timestamp: 2016-04-07T08:52:43.151550
+CREATE TABLE assay(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    assayname VARCHAR(512),
+    assaydescription TEXT,
+    pubchecbioassay_id VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:43.482373
+CREATE TABLE extract_assay(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    extract_id INTEGER REFERENCES extract (id) ON DELETE CASCADE,
+    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE,
+    compoundamount FLOAT8,
+    inhibition FLOAT8,
+    activity FLOAT8,
+    cytotoxicity FLOAT8,
+    sideEffects TEXT
+);
+success!
+timestamp: 2016-04-07T08:52:43.593823
+CREATE TABLE assay_doc(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    assay_id INTEGER REFERENCES assay (id) ON DELETE CASCADE,
+    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-07T08:52:43.776801
+CREATE TABLE target(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    targetname VARCHAR(512)
+);
+success!
+timestamp: 2016-04-07T08:52:44.027240
+CREATE TABLE assay_target(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    assay_id INTEGER REFERENCES assay (id) ON DELETE CASCADE,
+    target_id INTEGER REFERENCES target (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2016-04-11T14:21:49.708047
+ALTER TABLE doc ADD isbn VARCHAR(512);
+success!
+timestamp: 2016-04-11T14:21:50.045150
+CREATE TABLE borrame(
+    id SERIAL PRIMARY KEY,
+    lista TEXT
+);
+success!
+timestamp: 2016-04-11T15:09:11.130788
+ALTER TABLE compound DROP COLUMN iupacname;
+success!
+timestamp: 2016-04-11T16:01:59.739815
+ALTER TABLE compound ADD approved CHAR(1);
+success!

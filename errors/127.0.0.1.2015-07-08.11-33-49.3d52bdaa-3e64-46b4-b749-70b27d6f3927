@@ -1,0 +1,656 @@
+(dp1
+S'output'
+p2
+S'<class \'psycopg2.ProgrammingError\'> relation "raw_data" already exists\n'
+p3
+sS'layer'
+p4
+S'/home/www-data/web2py/applications/naturar/models/db.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\n\n#########################################################################\n## This scaffolding model makes your app work on Google App Engine too\n## File is released under public domain and you can use without limitations\n#########################################################################\n\n## if SSL/HTTPS is properly configured and you want all HTTP requests to\n## be redirected to HTTPS, uncomment the line below:\n# request.requires_https()\n\n## app configuration made easy. Look inside private/appconfig.ini\nfrom gluon.contrib.appconfig import AppConfig\n## once in production, remove reload=True to gain full speed\nmyconf = AppConfig(reload=True)\n\n\n#~ if not request.env.web2py_runtime_gae:\n    #~ ## if NOT running on Google App Engine use SQLite or other DB\n    #~ db = DAL(myconf.take(\'db.uri\'), pool_size=myconf.take(\'db.pool_size\', cast=int), check_reserved=[\'all\'])\n#~ else:\n    #~ ## connect to Google BigTable (optional \'google:datastore://namespace\')\n    #~ db = DAL(\'google:datastore+ndb\')\n    #~ ## store sessions and tickets there\n    #~ session.connect(request, response, db=db)\n    #~ ## or store session in Memcache, Redis, etc.\n    #~ ## from gluon.contrib.memdb import MEMDB\n    #~ ## from google.appengine.api.memcache import Client\n    #~ ## session.connect(request, response, db = MEMDB(Client()))\n    \ndb = DAL("postgres://fito:123456@localhost/emolecules")\n\n## by default give a view/generic.extension to all actions from localhost\n## none otherwise. a pattern can be \'controller/function.extension\'\nresponse.generic_patterns = [\'*\'] if request.is_local else []\n## choose a style for forms\nresponse.formstyle = myconf.take(\'forms.formstyle\')  # or \'bootstrap3_stacked\' or \'bootstrap2\' or other\nresponse.form_label_separator = myconf.take(\'forms.separator\')\n\n\n## (optional) optimize handling of static files\n# response.optimize_css = \'concat,minify,inline\'\n# response.optimize_js = \'concat,minify,inline\'\n## (optional) static assets folder versioning\n# response.static_version = \'0.0.0\'\n#########################################################################\n## Here is sample code if you need for\n## - email capabilities\n## - authentication (registration, login, logout, ... )\n## - authorization (role based authorization)\n## - services (xml, csv, json, xmlrpc, jsonrpc, amf, rss)\n## - old style crud actions\n## (more options discussed in gluon/tools.py)\n#########################################################################\n\nfrom gluon.tools import Auth, Service, PluginManager\n\nauth = Auth(db)\nservice = Service()\nplugins = PluginManager()\n\n## extra fields (mjl)\nauth.settings.extra_fields[\'auth_user\']= [\n  Field(\'address\', label=T(\'Address\')),\n  Field(\'city\', label=T(\'City\')),\n  Field(\'zip\', label=T(\'Zip\')),\n  Field(\'phone\', label=T(\'Phone\'))]\n\n## create all tables needed by auth if not custom tables\nauth.define_tables(username=False, signature=False)\n\n## configure email\nmail = auth.settings.mailer\nmail.settings.server = \'logging\' if request.is_local else myconf.take(\'smtp.server\')\nmail.settings.sender = myconf.take(\'smtp.sender\')\nmail.settings.login = myconf.take(\'smtp.login\')\n\n## configure auth policy\nauth.settings.registration_requires_verification = False\nauth.settings.registration_requires_approval = False\nauth.settings.reset_password_requires_verification = True\n\n#########################################################################\n## Define your tables below (or better in another model file) for example\n##\n## >>> db.define_table(\'mytable\',Field(\'myfield\',\'string\'))\n##\n## Fields can be \'string\',\'text\',\'password\',\'integer\',\'double\',\'boolean\'\n##       \'date\',\'time\',\'datetime\',\'blob\',\'upload\', \'reference TABLENAME\'\n## There is an implicit \'id integer autoincrement\' field\n## Consult manual for more options, validators, etc.\n##\n## More API examples for controllers:\n##\n## >>> db.mytable.insert(myfield=\'value\')\n## >>> rows=db(db.mytable.myfield==\'value\').select(db.mytable.ALL)\n## >>> for row in rows: print row.id, row.myfield\n#########################################################################\n\ndb.define_table(\'compound\',\n    Field(\'name\'),\n    Field(\'fuente\'),\n    Field(\'created_on\', \'datetime\', default=request.now),\n    Field(\'created_by\', \'reference auth_user\', default=auth.user_id))\n\n\ndb.define_table(\'raw_data\',\n    Field(\'smiles\', \'text\'),\n    Field(\'emol_id\', \'integer\'),\n    Field(\'parent_id\', \'integer\'))\n    \n\n## after defining tables, uncomment below to enable auditing\n# auth.enable_record_versioning(db)\n\n\n'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__module__'
+p12
+S"'psycopg2'"
+p13
+sS'__getslice__'
+p14
+S"<method-wrapper '__getslice__' of ProgrammingError object>"
+p15
+sS'__str__'
+p16
+S"<method-wrapper '__str__' of ProgrammingError object>"
+p17
+sS'__reduce__'
+p18
+S'<built-in method __reduce__ of ProgrammingError object>'
+p19
+sS'__dict__'
+p20
+S'{}'
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of ProgrammingError object>'
+p23
+sS'__weakref__'
+p24
+S'None'
+p25
+sS'__init__'
+p26
+S"<method-wrapper '__init__' of ProgrammingError object>"
+p27
+sS'__setattr__'
+p28
+S"<method-wrapper '__setattr__' of ProgrammingError object>"
+p29
+sS'__reduce_ex__'
+p30
+S'<built-in method __reduce_ex__ of ProgrammingError object>'
+p31
+sS'__new__'
+p32
+S'<built-in method __new__ of type object>'
+p33
+sS'diag'
+p34
+S'<psycopg2.extensions.Diagnostics object>'
+p35
+sS'__format__'
+p36
+S'<built-in method __format__ of ProgrammingError object>'
+p37
+sS'__class__'
+p38
+S"<class 'psycopg2.ProgrammingError'>"
+p39
+sS'pgerror'
+p40
+S'\'ERROR:  relation "raw_data" already exists\\n\''
+p41
+sS'__doc__'
+p42
+S"'Error related to database programming (SQL error, table not found etc).'"
+p43
+sS'__getitem__'
+p44
+S"<method-wrapper '__getitem__' of ProgrammingError object>"
+p45
+sS'__setstate__'
+p46
+S'<built-in method __setstate__ of ProgrammingError object>'
+p47
+sS'__getattribute__'
+p48
+S"<method-wrapper '__getattribute__' of ProgrammingError object>"
+p49
+sS'args'
+p50
+S'(\'relation "raw_data" already exists\\n\',)'
+p51
+sS'__subclasshook__'
+p52
+S'<built-in method __subclasshook__ of type object>'
+p53
+sS'pgcode'
+p54
+S"'42P07'"
+p55
+sS'__unicode__'
+p56
+S'<built-in method __unicode__ of ProgrammingError object>'
+p57
+sS'cursor'
+p58
+S'<cursor object at 0x7fed9008b148; closed: 0>'
+p59
+sS'__delattr__'
+p60
+S"<method-wrapper '__delattr__' of ProgrammingError object>"
+p61
+sS'__repr__'
+p62
+S"<method-wrapper '__repr__' of ProgrammingError object>"
+p63
+sS'__hash__'
+p64
+S"<method-wrapper '__hash__' of ProgrammingError object>"
+p65
+ssS'evalue'
+p66
+S'relation "raw_data" already exists\n'
+p67
+sS'request'
+p68
+cgluon.html
+XML_unpickle
+p69
+(S's\xfdd\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>data</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">PHPSESSID</td><td style="vertical-align:top;">:</td><td><div>3d98lnvngbv8vcdkplfbhmvr64<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SESS8eb5ce84c0e2dcecb4731bc26af0a345</td><td style="vertical-align:top;">:</td><td><div>SXxOMImhdCAL8YePADpYI4VoCFcvBIniilk31Z800W4<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SESS991cb8097aa82818c63e27aaf01fafcc</td><td style="vertical-align:top;">:</td><td><div>ExVier1SB5_S8CPfduXJlmCMmZ-jFv-waw1ckXVuIXI<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">csrftoken</td><td style="vertical-align:top;">:</td><td><div>Odp5UXcgjutXMq7E8Hmd9Wzc9IO1IPxM<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_admin</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-928e6c77-764a-4002-8467-142dcbfa6f1f<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_naturar</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-3d85e1c7-38a6-4773-ad49-d590a7f72d64<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_welcome</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-a4baa2fc-ce4f-4c2f-929a-d6a228a30363<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_LENGTH</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_TYPE</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">DOCUMENT_ROOT</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate, sdch</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CACHE_CONTROL</td><td style="vertical-align:top;">:</td><td><div>max-age=0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>SESS8eb5ce84c0e2dcecb4731bc26af0a345=SXxOMImhdCAL8YePADpYI4VoCFcvBIniilk31Z800W4; SESS991cb8097aa82818c63e27aaf01fafcc=ExVier1SB5_S8CPfduXJlmCMmZ-jFv-waw1ckXVuIXI; csrftoken=Odp5UXcgjutXMq7E8Hmd9Wzc9IO1IPxM; PHPSESSID=3d98lnvngbv8vcdkplfbhmvr64; session_id_welcome=127.0.0.1-a4baa2fc-ce4f-4c2f-929a-d6a228a30363; session_id_naturar=127.0.0.1-3d85e1c7-38a6-4773-ad49-d590a7f72d64; session_id_admin=127.0.0.1-928e6c77-764a-4002-8467-142dcbfa6f1f</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>localhost</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/list_molecules</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>36814</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_URI</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/list_molecules</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>nginx/1.4.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">UWSGI_SCHEME</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/www-data/web2py/applications/naturar/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_length</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_type</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">document_root</td><td style="vertical-align:top;">:</td><td><div>/usr/share/nginx/html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate, sdch</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cache_control</td><td style="vertical-align:top;">:</td><td><div>max-age=0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>SESS8eb5ce84c0e2dcecb4731bc26af0a345=SXxOMImhdCAL8YePADpYI4VoCFcvBIniilk31Z800W4; SESS991cb8097aa82818c63e27aaf01fafcc=ExVier1SB5_S8CPfduXJlmCMmZ-jFv-waw1ckXVuIXI; csrftoken=Odp5UXcgjutXMq7E8Hmd9Wzc9IO1IPxM; PHPSESSID=3d98lnvngbv8vcdkplfbhmvr64; session_id_welcome=127.0.0.1-a4baa2fc-ce4f-4c2f-929a-d6a228a30363; session_id_naturar=127.0.0.1-3d85e1c7-38a6-4773-ad49-d590a7f72d64; session_id_admin=127.0.0.1-928e6c77-764a-4002-8467-142dcbfa6f1f</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>localhost</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/list_molecules</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>36814</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/list_molecules</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>443</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>nginx/1.4.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.node</td><td style="vertical-align:top;">:</td><td><div>Gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi.version</td><td style="vertical-align:top;">:</td><td><div>2.0.11</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_node</td><td style="vertical-align:top;">:</td><td><div>Gandalf</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uwsgi_version</td><td style="vertical-align:top;">:</td><td><div>2.0.11</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.11.2-stable+timestamp.2015.05.30.16.33.24</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7fed92a8a4b0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7fed9c6f9af8&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;wsgi_errors&#x27;, mode &#x27;w&#x27; at 0x7fed92a8a4b0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;built-in function uwsgi_sendfile&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;uwsgi._Input object at 0x7fed9c6f9af8&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>https</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/applications/naturar/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>list_molecules</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/www-data/web2py/applications/naturar/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>gandalf</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>Gandalf</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.11.2-stable+timestamp.2015.05.30.16.33.24</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_sheduler</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2015, 7, 8, 11, 33, 49, 182707)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_args</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_extension</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/naturar/data/list_molecules</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2015, 7, 8, 14, 33, 49, 182752)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x7fed900bddd0&gt;</div></td></tr></table></div>'
+tRp70
+sS'frames'
+p71
+(lp72
+(dp73
+S'file'
+p74
+S'/home/www-data/web2py/gluon/restricted.py'
+p75
+sS'dump'
+p76
+(dp77
+S'environment'
+p78
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, ...}"
+p79
+sS'ccode'
+p80
+S'<code object <module> at 0x7fed8ffcdc30, file "/...b2py/applications/naturar/models/db.py", line 13>'
+p81
+ssS'lnum'
+p82
+I227
+sS'lines'
+p83
+(dp84
+I224
+S'            ccode = code'
+p85
+sI225
+S'        else:'
+p86
+sI226
+S'            ccode = compile2(code, layer)'
+p87
+sI227
+S'        exec ccode in environment'
+p88
+sI228
+S'    except HTTP:'
+p89
+sI229
+S'        raise'
+p90
+sI230
+S'    except RestrictedError:'
+p91
+sI231
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p92
+sI222
+S'    try:'
+p93
+sI223
+S'        if isinstance(code, types.CodeType):'
+p94
+ssS'call'
+p95
+S"(code='# -*- coding: utf-8 -*-\\n\\n#######################...e auditing\\n# auth.enable_record_versioning(db)\\n\\n\\n', environment={'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, ...}, layer='/home/www-data/web2py/applications/naturar/models/db.py')"
+p96
+sS'func'
+p97
+S'restricted'
+p98
+sa(dp99
+g74
+S'/home/www-data/web2py/applications/naturar/models/db.py'
+p100
+sg76
+(dp101
+S'Field'
+p102
+S"<class 'pydal.objects.Field'>"
+p103
+ssg82
+I110
+sg83
+(dp104
+I105
+S''
+sI106
+S''
+sI107
+S"db.define_table('raw_data',"
+p105
+sI108
+S"    Field('smiles', 'text'),"
+p106
+sI109
+S"    Field('emol_id', 'integer'),"
+p107
+sI110
+S"    Field('parent_id', 'integer'))"
+p108
+sI111
+S''
+sI112
+S''
+sI113
+S'## after defining tables, uncomment below to enable auditing'
+p109
+sI114
+S'# auth.enable_record_versioning(db)'
+p110
+ssg95
+S'()'
+p111
+sg97
+S'<module>'
+p112
+sa(dp113
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/base.py'
+p114
+sg76
+(dp115
+S'fields'
+p116
+S'(<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>)'
+p117
+sS'self'
+p118
+S'<DAL uri="postgres:******@localhost/emolecules">'
+p119
+sS'args'
+p120
+g21
+sS'tablename'
+p121
+S"'raw_data'"
+p122
+sS'table'
+p123
+S'undefined'
+p124
+sS'self.lazy_define_table'
+p125
+S'<bound method DAL.lazy_define_table of <DAL uri="postgres:******@localhost/emolecules">>'
+p126
+ssg82
+I819
+sg83
+(dp127
+I814
+S'                    % (tablename,invalid_args))'
+p128
+sI815
+S'        if self._lazy_tables and tablename not in self._LAZY_TABLES:'
+p129
+sI816
+S'            self._LAZY_TABLES[tablename] = (tablename,fields,args)'
+p130
+sI817
+S'            table = None'
+p131
+sI818
+S'        else:'
+p132
+sI819
+S'            table = self.lazy_define_table(tablename,*fields,**args)'
+p133
+sI820
+S'        if not tablename in self.tables:'
+p134
+sI821
+S'            self.tables.append(tablename)'
+p135
+sI822
+S'        return table'
+p136
+sI823
+S''
+ssg95
+S'(self=<DAL uri="postgres:******@localhost/emolecules">, tablename=\'raw_data\', *fields=(<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>), **args={})'
+p137
+sg97
+S'define_table'
+p138
+sa(dp139
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/base.py'
+p140
+sg76
+(dp141
+S'polymodel'
+p142
+S'None'
+p143
+ssg82
+I858
+sg83
+(dp144
+I853
+S'            try:'
+p145
+sI854
+S'                GLOBAL_LOCKER.acquire()'
+p146
+sI855
+S'                self._lastsql = self._adapter.create_table('
+p147
+sI856
+S'                    table,migrate=migrate,'
+p148
+sI857
+S'                    fake_migrate=fake_migrate,'
+p149
+sI858
+S'                    polymodel=polymodel)'
+p150
+sI859
+S'            finally:'
+p151
+sI860
+S'                GLOBAL_LOCKER.release()'
+p152
+sI861
+S'        else:'
+p153
+sI862
+S'            table._dbt = None'
+p154
+ssg95
+S'(self=<DAL uri="postgres:******@localhost/emolecules">, tablename=\'raw_data\', *fields=(<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>), **args={})'
+p155
+sg97
+S'lazy_define_table'
+p156
+sa(dp157
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p158
+sg76
+(dp159
+S'query'
+p160
+S"'CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);'"
+p161
+sS'self'
+p162
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p163
+sS'table'
+p164
+S'<Table raw_data (id,smiles,emol_id,parent_id)>'
+p165
+sS'self.create_sequence_and_triggers'
+p166
+S'<bound method PostgreSQLAdapter.create_sequence_...ydal.adapters.postgres.PostgreSQLAdapter object>>'
+p167
+ssg82
+I467
+sg83
+(dp168
+I462
+S'            if table._dbt:'
+p169
+sI463
+S"                self.log('timestamp: %s\\n%s\\n'"
+p170
+sI464
+S'                         % (datetime.datetime.today().isoformat(),'
+p171
+sI465
+S'                            query), table)'
+p172
+sI466
+S'            if not fake_migrate:'
+p173
+sI467
+S'                self.create_sequence_and_triggers(query,table)'
+p174
+sI468
+S'                table._db.commit()'
+p175
+sI469
+S'                # Postgres geom fields are added now,'
+p176
+sI470
+S'                # after the table has been created'
+p177
+sI471
+S'                for query in postcreation_fields:'
+p178
+ssg95
+S'(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, table=<Table raw_data (id,smiles,emol_id,parent_id)>, migrate=True, fake_migrate=False, polymodel=None)'
+p179
+sg97
+S'create_table'
+p180
+sa(dp181
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/adapters/postgres.py'
+p182
+sg76
+(dp183
+S'query'
+p184
+S"'CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);'"
+p185
+sS'self'
+p186
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p187
+sS'self.execute'
+p188
+S'<bound method PostgreSQLAdapter.execute of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p189
+ssg82
+I92
+sg83
+(dp190
+I96
+S"    def __init__(self, db,uri, pool_size=0, folder=None, db_codec ='UTF-8',"
+p191
+sI87
+S'    def create_sequence_and_triggers(self, query, table, **args):'
+p192
+sI88
+S'        # following lines should only be executed if table._sequence_name does not exist'
+p193
+sI89
+S"        # self.execute('CREATE SEQUENCE %s;' % table._sequence_name)"
+p194
+sI90
+S'        # self.execute("ALTER TABLE %s ALTER COLUMN %s SET DEFAULT NEXTVAL(\'%s\');" \\'
+p195
+sI91
+S'        #              % (table._tablename, table._fieldname, table._sequence_name))'
+p196
+sI92
+S'        self.execute(query)'
+p197
+sI93
+S''
+sI94
+S"    REGEX_URI = re.compile('^(?P<user>[^:@]+)(\\:(?P<password>[^@]*))?@(?P<host>[^\\:@]+)(\\:(?P<port>[0-9]+))?/(?P<db>[^\\?]+)(\\?sslmode=(?P<sslmode>.+))?$')"
+p198
+sI95
+S''
+ssg95
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, query='CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);', table=<Table raw_data (id,smiles,emol_id,parent_id)>, **args={})"
+p199
+sg97
+S'create_sequence_and_triggers'
+p200
+sa(dp201
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p202
+sg76
+(dp203
+S'a'
+S"('CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);',)"
+p204
+sS'self'
+p205
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p206
+sS'b'
+g21
+sS'self.log_execute'
+p207
+S'<bound method PostgreSQLAdapter.log_execute of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p208
+ssg82
+I1350
+sg83
+(dp209
+I1345
+S'        self.db._timings.append((command,time.time()-t0))'
+p210
+sI1346
+S'        del self.db._timings[:-TIMINGSSIZE]'
+p211
+sI1347
+S'        return ret'
+p212
+sI1348
+S''
+sI1349
+S'    def execute(self, *a, **b):'
+p213
+sI1350
+S'        return self.log_execute(*a, **b)'
+p214
+sI1351
+S''
+sI1352
+S'    def represent(self, obj, fieldtype):'
+p215
+sI1353
+S'        field_is_type = fieldtype.startswith'
+p216
+sI1354
+S'        if isinstance(obj, CALLABLETYPES):'
+p217
+ssg95
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=('CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);',), **b={})"
+p218
+sg97
+S'execute'
+p219
+sa(dp220
+g74
+S'/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p221
+sg76
+(dp222
+S'a'
+S"('CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);',)"
+p223
+sS'b'
+g21
+sS'self'
+p224
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p225
+sS'ret'
+p226
+g124
+sS'self.cursor'
+p227
+S'<cursor object at 0x7fed9008b148; closed: 0>'
+p228
+sS'command'
+p229
+S"'CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);'"
+p230
+sS'self.cursor.execute'
+p231
+S'<built-in method execute of psycopg2.extensions.cursor object>'
+p232
+ssg82
+I1344
+sg83
+(dp233
+I1344
+S'        ret = self.cursor.execute(command, *a[1:], **b)'
+p234
+sI1345
+S'        self.db._timings.append((command,time.time()-t0))'
+p235
+sI1346
+S'        del self.db._timings[:-TIMINGSSIZE]'
+p236
+sI1347
+S'        return ret'
+p237
+sI1348
+S''
+sI1339
+S'            command = self.filter_sql_command(command)'
+p238
+sI1340
+S'        if self.db._debug:'
+p239
+sI1341
+S"            self.db.logger.debug('SQL: %s' % command)"
+p240
+sI1342
+S'        self.db._lastsql = command'
+p241
+sI1343
+S'        t0 = time.time()'
+p242
+ssg95
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=('CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);',), **b={})"
+p243
+sg97
+S'log_execute'
+p244
+sasS'pyver'
+p245
+S'Python 2.7.6: /usr/local/bin/uwsgi (prefix: /usr)'
+p246
+sS'session'
+p247
+g69
+(S's\x98\x00\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div>'
+tRp248
+sS'etype'
+p249
+S"<class 'psycopg2.ProgrammingError'>"
+p250
+sS'date'
+p251
+S'Wed Jul  8 11:33:49 2015'
+p252
+sS'response'
+p253
+g69
+(S's\x00\x18\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x7fed90063ae8&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_naturar</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-3d85e1c7-38a6-4773-ad49-d590a7f72d64<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap3_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^data/\\w+\\.py$</div></td></tr><tr><td><div>^data/list_molecules/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_key</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;/home/www-data/web2py/applications/naturar/sessions/15e/0d4/127.0.0.1-3d85e1c7-38a6-4773-ad49-d590a7f72d64&#x27;, mode &#x27;rb+&#x27; at 0x7fed92a8adb0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/home/www-data/web2py/applications/naturar/sessions/127.0.0.1-3d85e1c7-38a6-4773-ad49-d590a7f72d64</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>7aebc974d8c6b357fc8f7477780fb259</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-3d85e1c7-38a6-4773-ad49-d590a7f72d64</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_locked</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>naturar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>data/list_molecules.html</div></td></tr></table></div>'
+tRp254
+sS'locals'
+p255
+(dp256
+S'a'
+S"('CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);',)"
+p257
+sS'self'
+p258
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p259
+sS'b'
+g21
+sS'command'
+p260
+S"'CREATE TABLE raw_data(\\n    id SERIAL PRIMARY KEY...XT,\\n    emol_id INTEGER,\\n    parent_id INTEGER\\n);'"
+p261
+sS't0'
+p262
+S'1436366029.425626'
+p263
+sssS'traceback'
+p264
+S'Traceback (most recent call last):\n  File "/home/www-data/web2py/gluon/restricted.py", line 227, in restricted\n    exec ccode in environment\n  File "/home/www-data/web2py/applications/naturar/models/db.py", line 110, in <module>\n    Field(\'parent_id\', \'integer\'))\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/base.py", line 819, in define_table\n    table = self.lazy_define_table(tablename,*fields,**args)\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/base.py", line 858, in lazy_define_table\n    polymodel=polymodel)\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py", line 467, in create_table\n    self.create_sequence_and_triggers(query,table)\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/adapters/postgres.py", line 92, in create_sequence_and_triggers\n    self.execute(query)\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py", line 1350, in execute\n    return self.log_execute(*a, **b)\n  File "/home/www-data/web2py/gluon/packages/dal/pydal/adapters/base.py", line 1344, in log_execute\n    ret = self.cursor.execute(command, *a[1:], **b)\nProgrammingError: relation "raw_data" already exists\n\n'
+p265
+s.
