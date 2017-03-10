@@ -33,9 +33,11 @@ myconf = AppConfig(reload=True)
     #~ ## from google.appengine.api.memcache import Client
     #~ ## session.connect(request, response, db = MEMDB(Client()))
     #~ 
-#~ db = DAL("postgres://fito:123456@localhost/naturardb")
+db = DAL("postgres://fito:123456@localhost:5432/naturardb")
 #~ db = DAL("postgres://fito:123456@localhost/naturardb", migrate=True, fake_migrate=True,)
-db = DAL("postgres://fito:123456@localhost/naturardb", migrate=True)
+#~ db = DAL("postgres://fito:123456@localhost/naturardb", migrate=False, fake_migrate=True,)
+
+#~ db = DAL("postgres://fito:123456@localhost/naturardb", migrate=True)
 
 #~ db = DAL("postgres://fito:123456@localhost/naturardb", lazy_tables=True)
 
@@ -70,8 +72,8 @@ plugins = PluginManager()
 
 ## extra fields (mjl)
 auth.settings.extra_fields['auth_user']= [
-    Field('address', type='text', label=T('Address')),
-    Field('phone', type='text', label=T('Phone')),
+    Field('address', type='string', label=T('Address')),
+    Field('phone', type='string', label=T('Phone')),
     Field('picture', type='upload', label=T('Picture')),
     Field('rearchdescription', type='text', label=T('Research Description')),
     Field('additionalinfo', type='text', label=T('Additional Information')),
@@ -186,7 +188,7 @@ db.define_table('compound',
     #~ Field('iupacname', type='string'),
     Field('inchi', type='string', readable=False, writable=False),
     Field('inchikey', type='string', readable=False, writable=False),
-    Field('isosmiles', type='string', readable=False, writable=False),
+    Field('isosmiles', type='string'),
     Field('cansmiles', type='string', readable=False, writable=False),
     Field('imagepath', type='text', readable=False, writable=False),
     Field('addinfo', type='text'), 
@@ -204,7 +206,7 @@ db.define_table('compound_doc',
     )
 
 '''
-Structures (conformers) of compounds
+Structures (rdkit mol type) of compounds
 '''
 #~ db.executesql('CREATE TABLE IF NOT EXISTS structure ( \
     #~ id integer NOT null, \
@@ -216,9 +218,18 @@ mol = SQLCustomType(
     native ='mol',
     )
 
-db.define_table('structure',
+db.define_table('rdkitstructure',
     auth.signature,
-    Field('molstructure', type=mol),
+    Field('rdkitstructure', type=mol),
+    Field('compound_id', 'reference compound'),
+    )
+
+'''
+Structures (mol file type) of compounds
+'''
+db.define_table('molstructure',
+    auth.signature,
+    Field('molstructure', type='text'),
     Field('compound_id', 'reference compound'),
     )
 
@@ -231,13 +242,13 @@ db.define_table('structuredescriptor',
     )
     
 '''
-Many to many table relationship: StructureDescriptors and Structures
+Many to many table relationship: StructureDescriptors and Rdkitstructures
 '''
 db.define_table('structure_descriptor',
     auth.signature,
     Field('structuredescriptor_id', 'reference structuredescriptor'),
-    Field('structure_id', 'reference structure'),
-    Field('descriptorvalue'),
+    Field('structure_id', 'reference rdkitstructure'),
+    Field('descriptorvalue', type='decimal(10,4)'),
     )    
 
 '''
@@ -359,7 +370,7 @@ db.define_table('compound_extraproperty',
 Table where is stored source information obtained frod databases like 
 Catalogue of Life using webservices.
 dbname is the name of the database whereis is obtained the data and 
-idfromdb is the original ID code .
+idfromdb is the original ID code.
 '''
 db.define_table('source', 
     auth.signature,
@@ -635,11 +646,64 @@ db.define_table('assay_target',
     )
 
 
+# --------------------------------------------------------------------
+# COMPOUND SUBMISSION
+# --------------------------------------------------------------------
+'''
+Compound submission, create a temporal compound and then, if all are right, it is approved.
+'''
+db.define_table('compoundsubmission',
+	auth.signature,
+	Field('inputsmiles', type='string'),
+	Field('inchi', type='string', readable=False, writable=False),
+    Field('inchikey', type='string', readable=False, writable=False),
+    Field('isosmiles', type='string', readable=False, writable=False),
+    Field('cansmiles', type='string', readable=False, writable=False),
+    Field('molstructure', type='text', readable=False, writable=False),
+    Field('rdkitstructure', type=mol, readable=False, writable=False),
+	Field('state', type='string', readable=False, writable=False),
+    Field('addinfo', type='text', readable=False, writable=False),
+    )
+
+'''
+Store temporal synonym names of submited compounds
+'''
+db.define_table('tmpsynonym',
+    auth.signature,
+    Field('synonymname', type='string'),
+    Field('compoundsubmission_id', 'reference compoundsubmission'),
+    )  
+
+'''
+Store temporal bibliographic information, this can be obtained from Crossref API
+'''
+db.define_table('tmpdoc', 
+    auth.signature,
+    Field('journal', type='string'),
+    Field('year', type='datetime', requires = IS_DATE(format=('%Y'))),
+    Field('volume', type='integer'),
+    Field('issue', type='integer'),
+    Field('firstpage', type='integer'),
+    Field('lastpage', type='integer'),
+    Field('doi', type='string'),
+    Field('isbn10', type='string'),
+    Field('issn', type='string'),
+    Field('pubmed_id'),
+    Field('title', type='text'),
+    Field('doctype', type='string'),
+    Field('authors'),
+    Field('abstract', type='text'),
+    Field('url', type='text'),
+    )
+    
+'''
+Many to many table relationship: Tmpdocs and Tmpcompounds
+'''
+db.define_table('tmpcompound_tmpdoc',
+    auth.signature,
+    Field('compoundsubmission_id', 'reference compoundsubmission'),
+    Field('doc_id', 'reference tmpdoc'),
+    )
 
 ## after defining tables, uncomment below to enable auditing
 #~ auth.enable_record_versioning(db)
-
-
-db.define_table('borrame',
-    Field('lista', type='list:string')
-    )

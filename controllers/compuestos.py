@@ -154,7 +154,7 @@ def custom_search():
     '''
     query=((db.compound.id > 0))
     fields = (db.compound.id, 
-        db.compound.smiles, 
+        db.compound.isosmiles, 
         db.compound.name, 
         )
  
@@ -355,10 +355,13 @@ def upload_molprocessing(form):
             else: 
                 form.errors.isosmiles = T('SMILES has an error, please check')
         else:
-            form.errors.isosmiles = T('You must introduce an structure using an smiles or uploading a file')  
+            form.errors.isosmiles = T('You must introduce an structure using an smiles or uploading a file') 
+            
+             
 
 def upload3():
-     # (1) Get available classifications
+  
+    # (1) Get available classifications
     classifications = [(r.id, r.classificationname) for r in db(db.classification).select()]
     chemicalclasses = [(r.id, r.classname_en) for r in db(db.chemicalclass).select()]
     #~ extracts = [(r.id, r.extractname) for r in db(db.chemicalclass).select()]
@@ -413,11 +416,23 @@ def upload3():
         if compound_id and form.vars.molstructure:
             filename = os.path.join(request.folder,'static/temp/') + form.vars.molstructure
             mol_data = file(filename,'r').read()
-            db.executesql("insert into structure (molstructure,compound_id) VALUES (mol_from_ctab('%s'::cstring), '%i');"%(mol_data,compound_id))
+            # RDKit mol
+            db.executesql("insert into structure (rdkitstructure,compound_id) VALUES (mol_from_ctab('%s'::cstring), '%i');"%(mol_data,compound_id))
+            # MOL file
+            db.executesql("insert into structure3d (molfile,compound_id) VALUES ('%s'::cstring, '%i');"%(mol_data,compound_id))
+
         elif compound_id and form.vars.isosmiles:
-            db.executesql("insert into structure (molstructure,compound_id) VALUES (mol_from_smiles('%s'::cstring), '%i');"%(form.vars.isosmiles,compound_id))
+            # RDKit mol
+            db.executesql("insert into structure (rdkitstructure,compound_id) VALUES (mol_from_smiles('%s'::cstring), '%i');"%(form.vars.isosmiles,compound_id))
+            m2 = Chem.MolFromSmiles(form.vars.isosmiles)
+            m2 = Chem.AddHs(m2)
+            AllChem.EmbedMolecule(m2)
+            AllChem.UFFOptimizeMolecule(m2)
+            # MOL file
+            mol_data = Chem.MolToMolBlock(m2)
+            db.executesql("insert into structure3d (molfile,compound_id) VALUES ('%s'::cstring, '%i');"%(mol_data,compound_id))
             
-        
+            
         #~ inputmolfile = os.path.join(request.folder,'static/temp/') + form.vars.molstructure
         #~ inputmolrdkit = Chem.MolFromMolFile(inputmolfile)
         #~ if inputmolrdkit == None:
@@ -430,3 +445,127 @@ def upload3():
         #~ content = SQLFORM.grid(db.compound)
 
     return dict(content=content)
+
+
+
+def submit_compound_processing(form):
+        #check if extension file is .mol
+        if IS_UPLOAD_FILENAME(extension='mol')(form.vars.molstructure)[1] == None:
+            #check if file is a mol file in correct format
+            if is_valid_ctab(form.vars.molstructure.value) == True: 
+                pass
+            #~ inputmolrdkit = Chem.MolFromMolFile(form.vars.molstructure.file)
+            #~ inputmolfile = os.path.join(request.folder,'static/temp/') + form.vars.molstructure
+            else:
+                form.errors.molstructure = T('You must introduce a mol structure file with correct format.')
+        elif form.vars.inputsmiles:
+            if is_valid_smiles(form.vars.inputsmiles)==True:
+                pass
+            else: 
+                form.errors.inputsmiles = T('SMILES has an error, please check')
+        else:
+            form.errors.inputsmiles = T('You must introduce an structure using an smiles or uploading a file') 
+            
+
+'''
+Submition of a new compound. 
+This data is store in temporal tables
+'''
+def submit_compound():
+    # (2) Build the form
+    form = SQLFORM.factory(
+        Field('molstructure', type='upload', uploadfolder=os.path.join(request.folder,'static/temp')), 
+        db.compoundsubmission,
+        #~ Field('inputselector',requires=IS_IN_SET(['Smile','Draw','File']),widget=SQLFORM.widgets.radio.widget),
+        Field('synonyms', type='list:string', requires=IS_NOT_EMPTY()),
+        Field('reference', type='list:string'),
+        Field('comment', type='text'),
+    )
+
+    # (3) Validate form data
+    if form.process(onvalidation=submit_compound_processing).accepted:
+        
+        # (4) Insert compound
+        compoundsubmission_id = db.compoundsubmission.insert(
+            **db.compoundsubmission._filter_fields(form.vars))
+        print 'compoundsub %i'%(compoundsubmission_id)
+                
+        # (7) Insert synonyms
+        if compoundsubmission_id and form.vars.tmpsynonyms:
+            synonymlist = form.vars.synonyms
+            for synonym in synonymlist:
+                db.tmpsynonym.insert(
+                    compoundsubmission_id=compoundsubmission_id,
+                    synonymname=str(synonym).strip('\r'))
+        
+        # (8) Insert structure
+        if compoundsubmission_id and form.vars.molstructure:
+            molfilename = os.path.join(request.folder,'static/temp/') + form.vars.molstructure
+            rdkitmol = Chem.MolFromMolFile(molfilename)
+            mol_data = file(molfilename,'r').read()
+            smiles_data = Chem.MolToSmiles(rdkitmol)
+        elif compoundsubmission_id and form.vars.inputsmiles:
+            rdkitmol = Chem.MolFromSmiles(form.vars.inputsmiles)
+            rdkitmol = Chem.AddHs(rdkitmol)
+            AllChem.EmbedMolecule(rdkitmol)
+            AllChem.UFFOptimizeMolecule(rdkitmol)
+            mol_data = Chem.MolToMolBlock(rdkitmol)
+            smiles_data = form.vars.inputsmiles
+        
+        # (9) Insert reference
+        print form.vars.reference
+        reference = input2doc(form.vars.reference)
+        print reference
+        row = db.tmpdoc(doi=form.vars.reference)
+        if not row:
+            db.tmpdoc.insert(doi=reference['message']['DOI'],title=reference['message']['title'][0])
+        
+        #~ elif not row.nearest: 
+            #~ row.update_record(nearset=nearest)
+        else: pass # do nothing 
+        
+        
+        print compoundsubmission_id
+        print 10*"\n"    
+        db.executesql("UPDATE compoundsubmission SET inputsmiles ='%s'::cstring, molstructure ='%s'::cstring, rdkitstructure =mol_from_ctab('%s'::cstring), addinfo='%s'::cstring WHERE id='%i';"%(smiles_data, mol_data, mol_data, form.vars.addinfo, compoundsubmission_id))
+          
+        #~ inputmolfile = os.path.join(request.folder,'static/temp/') + form.vars.molstructure
+        #~ inputmolrdkit = Chem.MolFromMolFile(inputmolfile)
+        response.flash = T('Compound has been uploaded successfully.')
+    content = form
+    return dict(content=content)
+
+
+
+def product():
+    if not request.args: redirect(URL(c='default',f='index'))
+    try:
+        int(request.args(0))
+    except ValueError:
+        raise HTTP(404, 'Product not found. Invalid ID.')
+
+    product = db(db.compound.id == int(request.args(0))).select().first()
+    specification = db(db.specification.product == product.id).select().first()
+    reviews = db(db.review.product == product.id).select()
+
+    form = SQLFORM.factory(
+        Field('quantity', 'integer', default=1),
+        _class="form-inline"
+        )
+    if form.accepts(request.vars, session):
+        quantity = int(form.vars.quantity)
+        if quantity > product.quantity or quantity <= 0:
+            response.flash = T('Unavailable quantity.')
+        else:
+            for prod in session.cart:
+                if prod[0] == product.id:
+                    prod[1] += quantity
+                    break
+                else:
+                    session.cart.append([product.id, quantity])
+                    break
+            else:
+                session.cart.append([product.id, quantity])
+            redirect(URL(c='default',f='checkout'))
+
+    return dict(product=product, specification=specification, reviews=reviews, form=form)
