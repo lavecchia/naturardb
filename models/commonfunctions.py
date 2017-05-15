@@ -29,3 +29,12 @@ def rows_transpose(rows_obj , headers=None):
     return res_table 
 
 
+def mol_export(compound_id):
+	#create fake file object
+	import cStringIO
+	molfile = cStringIO.StringIO()
+	row = db(db.molstructure.compound_id==compound_id).select(db.molstructure.molstructure).first()
+	molfile.write(row['molstructure'])
+	#~ molfile.close()
+
+	return molfile

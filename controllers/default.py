@@ -16,8 +16,8 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    response.flash = T("Hello World")
-    return dict(message=T('Welcome to web2py!'))
+    #~ return response.flash = T("Hello World")
+    return dict(message="")
 
 
 def user():
@@ -94,3 +94,9 @@ def manage_membership():
                        user_signature=False)
     return form
 
+def get_my_file():
+      filename=request.args[0]
+      path=os.path.join(request.folder,'statics/temp',filename)
+      response.headers['ContentType'] ="application/octet-stream";
+      response.headers['Content-Disposition']="attachment; filename="+filename
+      return response.stream(open(path),chunk_size=4096)

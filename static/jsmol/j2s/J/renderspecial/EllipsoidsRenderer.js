@@ -92,7 +92,7 @@ this.bGlobals[2] = this.vwr.getBooleanProperty ("ellipsoidAxes");
 this.bGlobals[4] = this.vwr.getBooleanProperty ("ellipsoidBall");
 this.bGlobals[0] = this.vwr.getBooleanProperty ("ellipsoidDots");
 this.bGlobals[3] = this.vwr.getBooleanProperty ("ellipsoidFill");
-this.bGlobals[6] = !this.isExport && !this.vwr.checkMotionRendering (1113198596);
+this.bGlobals[6] = !this.isExport && !this.vwr.checkMotionRendering (1112150020);
 this.diameter0 = Math.round ((this.vwr.getP ("ellipsoidAxisDiameter")).floatValue () * 1000);
 var m4 = this.tm.matrixTransform;
 this.mat.setRow (0, m4.m00, m4.m01, m4.m02);
@@ -296,8 +296,7 @@ if (this.g3d.drawEllipse (this.center, this.points[0], this.points[2], this.fill
 this.g3d.drawEllipse (this.center, this.points[2], this.points[5], this.fillArc, this.bOptions[6]);
 this.g3d.drawEllipse (this.center, this.points[5], this.points[0], this.fillArc, this.bOptions[6]);
 return;
-}for (var i = 1; i < 8; i += 2) {
-var pt = i * 3;
+}for (var i = 1, pt = 3; i < 8; i += 2, pt += 6) {
 this.renderArc (J.renderspecial.EllipsoidsRenderer.octants[pt], J.renderspecial.EllipsoidsRenderer.octants[pt + 1]);
 this.renderArc (J.renderspecial.EllipsoidsRenderer.octants[pt + 1], J.renderspecial.EllipsoidsRenderer.octants[pt + 2]);
 this.renderArc (J.renderspecial.EllipsoidsRenderer.octants[pt + 2], J.renderspecial.EllipsoidsRenderer.octants[pt]);
@@ -320,8 +319,9 @@ for (var i = 0, pt = 0; i < 18; i++, pt += 2) {
 this.pt2.scaleAdd2 (J.renderspecial.EllipsoidsRenderer.cossin[pt] * d1, this.v1, this.center);
 this.pt2.scaleAdd2 (J.renderspecial.EllipsoidsRenderer.cossin[pt + 1] * d2, this.v2, this.pt2);
 this.tm.transformPtScrT3 (this.pt2, this.s2);
-if (this.fillArc) this.g3d.fillTriangle3CNBits (this.s0, this.colix, normix, this.s1, this.colix, normix, this.s2, this.colix, normix);
- else if (this.bOptions[6]) this.g3d.fillCylinderBits (2, this.diameter, this.s1, this.s2);
+if (this.fillArc) {
+this.g3d.fillTriangle3CNBits (this.s0, this.colix, normix, this.s1, this.colix, normix, this.s2, this.colix, normix, true);
+} else if (this.bOptions[6]) this.g3d.fillCylinderBits (2, this.diameter, this.s1, this.s2);
  else this.screens[i + 7].setT (this.s2);
 this.pt1.setT (this.pt2);
 this.s1.setT (this.s2);

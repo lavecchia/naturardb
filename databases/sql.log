@@ -1,760 +1,4 @@
-timestamp: 2016-10-07T15:29:54.874857
-CREATE TABLE auth_user(
-    id SERIAL PRIMARY KEY,
-    first_name VARCHAR(128),
-    last_name VARCHAR(128),
-    email VARCHAR(512),
-    password VARCHAR(512),
-    registration_key VARCHAR(512),
-    reset_password_key VARCHAR(512),
-    registration_id VARCHAR(512),
-    address TEXT,
-    phone TEXT,
-    picture VARCHAR(512),
-    rearchdescription TEXT,
-    additionalinfo TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:54.997735
-CREATE TABLE auth_group(
-    id SERIAL PRIMARY KEY,
-    role VARCHAR(512),
-    description TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:55.003731
-CREATE TABLE auth_membership(
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.077159
-CREATE TABLE auth_permission(
-    id SERIAL PRIMARY KEY,
-    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
-    name VARCHAR(512),
-    table_name VARCHAR(512),
-    record_id INTEGER
-);
-success!
-timestamp: 2016-10-07T15:29:55.084408
-CREATE TABLE auth_event(
-    id SERIAL PRIMARY KEY,
-    time_stamp TIMESTAMP,
-    client_ip VARCHAR(512),
-    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    origin VARCHAR(512),
-    description TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:55.090792
-CREATE TABLE auth_cas(
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    created_on TIMESTAMP,
-    service VARCHAR(512),
-    ticket VARCHAR(512),
-    renew CHAR(1)
-);
-success!
-timestamp: 2016-10-07T15:29:55.097246
-CREATE TABLE settings(
-    id SERIAL PRIMARY KEY,
-    imagedir VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.126827
-CREATE TABLE location(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    country VARCHAR(512),
-    state VARCHAR(512),
-    city VARCHAR(512),
-    place VARCHAR(512),
-    latitude FLOAT8,
-    longitude FLOAT8,
-    yahoowoeid INTEGER,
-    googleplaceid VARCHAR(512),
-    placetypename VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.134831
-CREATE TABLE doc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    journal VARCHAR(512),
-    year TIMESTAMP,
-    volume INTEGER,
-    issue INTEGER,
-    firstpage INTEGER,
-    lastpage INTEGER,
-    doi VARCHAR(512),
-    isbn VARCHAR(512),
-    pubmed_id VARCHAR(512),
-    title TEXT,
-    doctype VARCHAR(512),
-    authors VARCHAR(512),
-    abstract TEXT,
-    url TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:55.144756
-CREATE TABLE compound(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    inchi VARCHAR(512),
-    inchikey VARCHAR(512),
-    isosmiles VARCHAR(512),
-    cansmiles VARCHAR(512),
-    imagepath TEXT,
-    addinfo TEXT,
-    approved CHAR(1)
-);
-success!
-timestamp: 2016-10-07T15:29:55.681117
-CREATE TABLE compound_doc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.688194
-CREATE TABLE rdkitstructure(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    rdkitstructure mol,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.695627
-CREATE TABLE molstructure(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    molstructure TEXT,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.703183
-CREATE TABLE structuredescriptor(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    methodname VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.714886
-CREATE TABLE structure_descriptor(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    structuredescriptor_id INTEGER REFERENCES structuredescriptor (id) ON DELETE CASCADE  ,
-    structure_id INTEGER REFERENCES rdkitstructure (id) ON DELETE CASCADE  ,
-    descriptorvalue NUMERIC(10,4)
-);
-success!
-timestamp: 2016-10-07T15:29:55.722087
-CREATE TABLE synonymtype(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    synonymtype VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.730450
-CREATE TABLE synonym(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    synonymtype_id INTEGER REFERENCES synonymtype (id) ON DELETE CASCADE  ,
-    synonymname VARCHAR(512),
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.738393
-CREATE TABLE classification(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    classificationname VARCHAR(512),
-    classificationdescription TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:55.745092
-CREATE TABLE compound_classification(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    classification_id INTEGER REFERENCES classification (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.752604
-CREATE TABLE chemicalclass(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    classname_en VARCHAR(512),
-    classname_es VARCHAR(512),
-    classdescription TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:55.762322
-CREATE TABLE compound_chemicalclass(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    chemicalclass_id INTEGER REFERENCES chemicalclass (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.772006
-CREATE TABLE isomer(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compound1_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    compound2_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.782234
-CREATE TABLE compoundproperty(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    molecularweight NUMERIC(10,4),
-    molecularformula VARCHAR(512),
-    molecularvolume NUMERIC(10,3),
-    logp NUMERIC(10,4),
-    tpsa NUMERIC(10,4),
-    hbd INTEGER,
-    hba INTEGER,
-    numrotatable INTEGER,
-    numring INTEGER,
-    numn INTEGER,
-    numo INTEGER,
-    nums INTEGER,
-    numro5violation INTEGER
-);
-success!
-timestamp: 2016-10-07T15:29:55.792932
-CREATE TABLE extraproperty(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    extrapropertyname_en VARCHAR(512),
-    extrapropertyname_es VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.803104
-CREATE TABLE compound_extraproperty(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    extraproperty_id INTEGER REFERENCES extraproperty (id) ON DELETE CASCADE  ,
-    extrapropertyvalue VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.813675
-CREATE TABLE source(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    scientificname VARCHAR(512),
-    sourcekingdom VARCHAR(512),
-    sourcefamily VARCHAR(512),
-    sourcegenus VARCHAR(512),
-    sourcespecies VARCHAR(512),
-    variety VARCHAR(512),
-    ethnomedicinalinfo TEXT,
-    dbname VARCHAR(512),
-    idfromdb VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.821957
-CREATE TABLE sourceimage(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    sourceimage VARCHAR(512),
-    credit VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.832441
-CREATE TABLE nativename(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    nativename VARCHAR(512),
-    culture VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.843283
-CREATE TABLE commonname(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    commonname VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.855050
-CREATE TABLE medicinal(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    medicinaluse_en VARCHAR(512),
-    medicinaluse_es VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.895471
-CREATE TABLE source_medicinal(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    medicinal_id INTEGER REFERENCES medicinal (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.903327
-CREATE TABLE food(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    fooduse_en VARCHAR(512),
-    fooduse_es VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.912114
-CREATE TABLE source_food(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    food_id INTEGER REFERENCES food (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.920593
-CREATE TABLE otheruse(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    otherusename VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.929401
-CREATE TABLE source_otheruse(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    otheruse_id INTEGER REFERENCES otheruse (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.938539
-CREATE TABLE source_location(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    location_id INTEGER REFERENCES location (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.947841
-CREATE TABLE source_doc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.956687
-CREATE TABLE message(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    messagetitle VARCHAR(512),
-    messagebody TEXT,
-    usersent_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    userreceiver_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    date TIMESTAMP
-);
-success!
-timestamp: 2016-10-07T15:29:55.965065
-CREATE TABLE researchgroup(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    reseachname VARCHAR(512),
-    institution VARCHAR(512),
-    webpage VARCHAR(512),
-    email VARCHAR(512),
-    telephone VARCHAR(512),
-    address VARCHAR(512),
-    location_id INTEGER REFERENCES location (id) ON DELETE CASCADE  ,
-    logo VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:55.973935
-CREATE TABLE user_reseach(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    researchgroup_id INTEGER REFERENCES researchgroup (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.985366
-CREATE TABLE user_doc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:55.996581
-CREATE TABLE bookmark(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:56.007120
-CREATE TABLE partused(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    partname_en VARCHAR(512),
-    partname_es VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:56.016694
-CREATE TABLE extract(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    source_id INTEGER REFERENCES source (id) ON DELETE CASCADE  ,
-    location_id INTEGER REFERENCES location (id) ON DELETE CASCADE  ,
-    partused_id INTEGER REFERENCES partused (id) ON DELETE CASCADE  ,
-    extractpreparation TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:56.027631
-CREATE TABLE extract_doc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    extract_id INTEGER REFERENCES extract (id) ON DELETE CASCADE  ,
-    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:56.037953
-CREATE TABLE compound_extract(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    extract_id INTEGER REFERENCES extract (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    compoundamount FLOAT8
-);
-success!
-timestamp: 2016-10-07T15:29:56.048569
-CREATE TABLE assay(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    assayname VARCHAR(512),
-    assaydescription TEXT,
-    pubchecbioassay_id VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:56.059967
-CREATE TABLE extract_assay(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    extract_id INTEGER REFERENCES extract (id) ON DELETE CASCADE  ,
-    compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ,
-    compoundamount FLOAT8,
-    inhibition FLOAT8,
-    activity FLOAT8,
-    cytotoxicity FLOAT8,
-    sideEffects TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:56.071302
-CREATE TABLE assay_doc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    assay_id INTEGER REFERENCES assay (id) ON DELETE CASCADE  ,
-    doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:56.081811
-CREATE TABLE target(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    targetname VARCHAR(512)
-);
-success!
-timestamp: 2016-10-07T15:29:56.090812
-CREATE TABLE assay_target(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    assay_id INTEGER REFERENCES assay (id) ON DELETE CASCADE  ,
-    target_id INTEGER REFERENCES target (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:56.101147
-CREATE TABLE compoundsubmission(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    smiles VARCHAR(512),
-    molstructure TEXT,
-    rdkitstructure mol,
-    state VARCHAR(512),
-    addinfo TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:56.699329
-CREATE TABLE tmpsynonym(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    synonymname VARCHAR(512),
-    compoundsubmission_id INTEGER REFERENCES compoundsubmission (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-07T15:29:56.708627
-CREATE TABLE tmpdoc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    journal VARCHAR(512),
-    year TIMESTAMP,
-    volume INTEGER,
-    issue INTEGER,
-    firstpage INTEGER,
-    lastpage INTEGER,
-    doi VARCHAR(512),
-    isbn VARCHAR(512),
-    pubmed_id VARCHAR(512),
-    title TEXT,
-    doctype VARCHAR(512),
-    authors VARCHAR(512),
-    abstract TEXT,
-    url TEXT
-);
-success!
-timestamp: 2016-10-07T15:29:56.720708
-CREATE TABLE tmpcompound_tmpdoc(
-    id SERIAL PRIMARY KEY,
-    is_active CHAR(1),
-    created_on TIMESTAMP,
-    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    modified_on TIMESTAMP,
-    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    compoundsubmission_id INTEGER REFERENCES compoundsubmission (id) ON DELETE CASCADE  ,
-    doc_id INTEGER REFERENCES tmpdoc (id) ON DELETE CASCADE  
-);
-success!
-timestamp: 2016-10-21T15:00:14.320355
-ALTER TABLE auth_user ADD phone__tmp VARCHAR(512);
-UPDATE auth_user SET phone__tmp=phone;
-ALTER TABLE auth_user DROP COLUMN phone;
-ALTER TABLE auth_user ADD phone VARCHAR(512);
-UPDATE auth_user SET phone=phone__tmp;
-ALTER TABLE auth_user DROP COLUMN phone__tmp;
-timestamp: 2016-10-21T15:00:14.738411
-ALTER TABLE auth_user ADD address__tmp VARCHAR(512);
-UPDATE auth_user SET address__tmp=address;
-ALTER TABLE auth_user DROP COLUMN address;
-ALTER TABLE auth_user ADD address VARCHAR(512);
-UPDATE auth_user SET address=address__tmp;
-ALTER TABLE auth_user DROP COLUMN address__tmp;
-success!
-timestamp: 2016-10-21T20:03:53.250052
-ALTER TABLE compoundsubmission ADD inputsmiles VARCHAR(512);
-timestamp: 2016-10-21T20:03:53.297646
-ALTER TABLE compoundsubmission DROP COLUMN smiles;
-success!
-timestamp: 2016-10-21T20:06:14.979411
-ALTER TABLE compoundsubmission ADD inchikey VARCHAR(512);
-timestamp: 2016-10-21T20:06:15.004823
-ALTER TABLE compoundsubmission ADD cansmiles VARCHAR(512);
-timestamp: 2016-10-21T20:06:15.007893
-ALTER TABLE compoundsubmission ADD isosmiles VARCHAR(512);
-timestamp: 2016-10-21T20:06:15.013497
-ALTER TABLE compoundsubmission ADD inchi VARCHAR(512);
-success!
-timestamp: 2016-10-28T15:37:31.138680
-ALTER TABLE tmpdoc ADD isbn10 VARCHAR(512);
-timestamp: 2016-10-28T15:37:31.275891
-ALTER TABLE tmpdoc ADD issn VARCHAR(512);
-timestamp: 2016-10-28T15:37:31.300259
-ALTER TABLE tmpdoc DROP COLUMN isbn;
-success!
-timestamp: 2017-03-02T15:21:22.612498
+timestamp: 2017-03-14T12:48:21.902707
 CREATE TABLE auth_user(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(128),
@@ -771,21 +15,21 @@ CREATE TABLE auth_user(
     additionalinfo TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:23.383427
+timestamp: 2017-03-14T12:48:22.137340
 CREATE TABLE auth_group(
     id SERIAL PRIMARY KEY,
     role VARCHAR(512),
     description TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:23.665693
+timestamp: 2017-03-14T12:48:22.318859
 CREATE TABLE auth_membership(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:23.766474
+timestamp: 2017-03-14T12:48:22.452558
 CREATE TABLE auth_permission(
     id SERIAL PRIMARY KEY,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -794,7 +38,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2017-03-02T15:21:23.991343
+timestamp: 2017-03-14T12:48:22.652957
 CREATE TABLE auth_event(
     id SERIAL PRIMARY KEY,
     time_stamp TIMESTAMP,
@@ -804,7 +48,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:24.325505
+timestamp: 2017-03-14T12:48:22.829011
 CREATE TABLE auth_cas(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
@@ -814,13 +58,13 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
-timestamp: 2017-03-02T15:21:24.533184
+timestamp: 2017-03-14T12:48:23.061824
 CREATE TABLE settings(
     id SERIAL PRIMARY KEY,
     imagedir VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:24.711454
+timestamp: 2017-03-14T12:48:23.197924
 CREATE TABLE location(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -839,7 +83,7 @@ CREATE TABLE location(
     placetypename VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:24.876924
+timestamp: 2017-03-14T12:48:23.363675
 CREATE TABLE doc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -863,7 +107,7 @@ CREATE TABLE doc(
     url TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:25.034998
+timestamp: 2017-03-14T12:48:23.538349
 CREATE TABLE compound(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -880,7 +124,7 @@ CREATE TABLE compound(
     approved CHAR(1)
 );
 success!
-timestamp: 2017-03-02T15:21:25.226685
+timestamp: 2017-03-14T12:48:23.747046
 CREATE TABLE compound_doc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -892,7 +136,7 @@ CREATE TABLE compound_doc(
     doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:25.293350
+timestamp: 2017-03-14T12:48:23.830174
 CREATE TABLE rdkitstructure(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -904,7 +148,7 @@ CREATE TABLE rdkitstructure(
     compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:25.435262
+timestamp: 2017-03-14T12:48:24.067811
 CREATE TABLE molstructure(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -916,7 +160,7 @@ CREATE TABLE molstructure(
     compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:25.616189
+timestamp: 2017-03-14T12:48:24.240979
 CREATE TABLE structuredescriptor(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -927,7 +171,7 @@ CREATE TABLE structuredescriptor(
     methodname VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:25.791278
+timestamp: 2017-03-14T12:48:24.410367
 CREATE TABLE structure_descriptor(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -940,7 +184,7 @@ CREATE TABLE structure_descriptor(
     descriptorvalue NUMERIC(10,4)
 );
 success!
-timestamp: 2017-03-02T15:21:25.899690
+timestamp: 2017-03-14T12:48:24.609983
 CREATE TABLE synonymtype(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -951,7 +195,7 @@ CREATE TABLE synonymtype(
     synonymtype VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:26.149997
+timestamp: 2017-03-14T12:48:24.869317
 CREATE TABLE synonym(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -964,7 +208,7 @@ CREATE TABLE synonym(
     compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:26.408825
+timestamp: 2017-03-14T12:48:25.011162
 CREATE TABLE classification(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -976,7 +220,7 @@ CREATE TABLE classification(
     classificationdescription TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:26.892755
+timestamp: 2017-03-14T12:48:25.169627
 CREATE TABLE compound_classification(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -988,7 +232,7 @@ CREATE TABLE compound_classification(
     classification_id INTEGER REFERENCES classification (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:26.967545
+timestamp: 2017-03-14T12:48:25.269897
 CREATE TABLE chemicalclass(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1001,7 +245,7 @@ CREATE TABLE chemicalclass(
     classdescription TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:27.142640
+timestamp: 2017-03-14T12:48:25.453666
 CREATE TABLE compound_chemicalclass(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1013,7 +257,7 @@ CREATE TABLE compound_chemicalclass(
     chemicalclass_id INTEGER REFERENCES chemicalclass (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:27.201203
+timestamp: 2017-03-14T12:48:25.579386
 CREATE TABLE isomer(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1025,7 +269,7 @@ CREATE TABLE isomer(
     compound2_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:27.328019
+timestamp: 2017-03-14T12:48:25.714085
 CREATE TABLE compoundproperty(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1049,7 +293,7 @@ CREATE TABLE compoundproperty(
     numro5violation INTEGER
 );
 success!
-timestamp: 2017-03-02T15:21:27.443636
+timestamp: 2017-03-14T12:48:25.929685
 CREATE TABLE extraproperty(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1061,7 +305,7 @@ CREATE TABLE extraproperty(
     extrapropertyname_es VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:27.652025
+timestamp: 2017-03-14T12:48:26.119375
 CREATE TABLE compound_extraproperty(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1074,7 +318,7 @@ CREATE TABLE compound_extraproperty(
     extrapropertyvalue VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:27.835778
+timestamp: 2017-03-14T12:48:26.306836
 CREATE TABLE source(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1093,7 +337,7 @@ CREATE TABLE source(
     idfromdb VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:28.019331
+timestamp: 2017-03-14T12:48:26.556092
 CREATE TABLE sourceimage(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1106,7 +350,7 @@ CREATE TABLE sourceimage(
     credit VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:28.177865
+timestamp: 2017-03-14T12:48:26.739763
 CREATE TABLE nativename(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1119,7 +363,7 @@ CREATE TABLE nativename(
     culture VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:28.327906
+timestamp: 2017-03-14T12:48:27.023171
 CREATE TABLE commonname(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1131,7 +375,7 @@ CREATE TABLE commonname(
     commonname VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:28.594396
+timestamp: 2017-03-14T12:48:27.232042
 CREATE TABLE medicinal(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1143,7 +387,7 @@ CREATE TABLE medicinal(
     medicinaluse_es VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:28.869754
+timestamp: 2017-03-14T12:48:27.474043
 CREATE TABLE source_medicinal(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1155,7 +399,7 @@ CREATE TABLE source_medicinal(
     medicinal_id INTEGER REFERENCES medicinal (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:29.062025
+timestamp: 2017-03-14T12:48:27.565753
 CREATE TABLE food(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1167,7 +411,7 @@ CREATE TABLE food(
     fooduse_es VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:29.237335
+timestamp: 2017-03-14T12:48:27.698923
 CREATE TABLE source_food(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1179,7 +423,7 @@ CREATE TABLE source_food(
     food_id INTEGER REFERENCES food (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:29.353597
+timestamp: 2017-03-14T12:48:27.833012
 CREATE TABLE otheruse(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1190,7 +434,7 @@ CREATE TABLE otheruse(
     otherusename VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:29.512689
+timestamp: 2017-03-14T12:48:28.024634
 CREATE TABLE source_otheruse(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1202,7 +446,7 @@ CREATE TABLE source_otheruse(
     otheruse_id INTEGER REFERENCES otheruse (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:29.629296
+timestamp: 2017-03-14T12:48:28.216474
 CREATE TABLE source_location(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1214,7 +458,7 @@ CREATE TABLE source_location(
     location_id INTEGER REFERENCES location (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:29.729388
+timestamp: 2017-03-14T12:48:28.325413
 CREATE TABLE source_doc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1226,7 +470,7 @@ CREATE TABLE source_doc(
     doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:29.965351
+timestamp: 2017-03-14T12:48:28.475590
 CREATE TABLE message(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1241,7 +485,7 @@ CREATE TABLE message(
     date TIMESTAMP
 );
 success!
-timestamp: 2017-03-02T15:21:30.263413
+timestamp: 2017-03-14T12:48:28.692084
 CREATE TABLE researchgroup(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1259,7 +503,7 @@ CREATE TABLE researchgroup(
     logo VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:30.380093
+timestamp: 2017-03-14T12:48:28.784777
 CREATE TABLE user_reseach(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1271,7 +515,7 @@ CREATE TABLE user_reseach(
     researchgroup_id INTEGER REFERENCES researchgroup (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:30.522603
+timestamp: 2017-03-14T12:48:28.851410
 CREATE TABLE user_doc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1283,7 +527,7 @@ CREATE TABLE user_doc(
     doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:30.589024
+timestamp: 2017-03-14T12:48:28.918581
 CREATE TABLE bookmark(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1295,7 +539,7 @@ CREATE TABLE bookmark(
     compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:30.655972
+timestamp: 2017-03-14T12:48:29.089048
 CREATE TABLE partused(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1307,7 +551,7 @@ CREATE TABLE partused(
     partname_es VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:30.890368
+timestamp: 2017-03-14T12:48:29.344726
 CREATE TABLE extract(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1321,7 +565,7 @@ CREATE TABLE extract(
     extractpreparation TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:31.352274
+timestamp: 2017-03-14T12:48:29.520483
 CREATE TABLE extract_doc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1333,7 +577,7 @@ CREATE TABLE extract_doc(
     doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:31.549910
+timestamp: 2017-03-14T12:48:29.679468
 CREATE TABLE compound_extract(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1346,7 +590,7 @@ CREATE TABLE compound_extract(
     compoundamount FLOAT8
 );
 success!
-timestamp: 2017-03-02T15:21:31.682894
+timestamp: 2017-03-14T12:48:29.770725
 CREATE TABLE assay(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1359,7 +603,7 @@ CREATE TABLE assay(
     pubchecbioassay_id VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:32.092462
+timestamp: 2017-03-14T12:48:29.963727
 CREATE TABLE extract_assay(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1376,7 +620,7 @@ CREATE TABLE extract_assay(
     sideEffects TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:32.543223
+timestamp: 2017-03-14T12:48:30.055358
 CREATE TABLE assay_doc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1388,7 +632,7 @@ CREATE TABLE assay_doc(
     doc_id INTEGER REFERENCES doc (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:32.626298
+timestamp: 2017-03-14T12:48:30.146847
 CREATE TABLE target(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1399,7 +643,7 @@ CREATE TABLE target(
     targetname VARCHAR(512)
 );
 success!
-timestamp: 2017-03-02T15:21:32.810183
+timestamp: 2017-03-14T12:48:30.247063
 CREATE TABLE assay_target(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1411,7 +655,7 @@ CREATE TABLE assay_target(
     target_id INTEGER REFERENCES target (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:32.927591
+timestamp: 2017-03-14T12:48:30.381353
 CREATE TABLE compoundsubmission(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1430,7 +674,7 @@ CREATE TABLE compoundsubmission(
     addinfo TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:33.126691
+timestamp: 2017-03-14T12:48:30.606271
 CREATE TABLE tmpsynonym(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1442,7 +686,7 @@ CREATE TABLE tmpsynonym(
     compoundsubmission_id INTEGER REFERENCES compoundsubmission (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-03-02T15:21:33.319071
+timestamp: 2017-03-14T12:48:30.782286
 CREATE TABLE tmpdoc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1467,7 +711,7 @@ CREATE TABLE tmpdoc(
     url TEXT
 );
 success!
-timestamp: 2017-03-02T15:21:33.535723
+timestamp: 2017-03-14T12:48:30.898389
 CREATE TABLE tmpcompound_tmpdoc(
     id SERIAL PRIMARY KEY,
     is_active CHAR(1),
@@ -1478,4 +722,80 @@ CREATE TABLE tmpcompound_tmpdoc(
     compoundsubmission_id INTEGER REFERENCES compoundsubmission (id) ON DELETE CASCADE  ,
     doc_id INTEGER REFERENCES tmpdoc (id) ON DELETE CASCADE  
 );
+success!
+timestamp: 2017-03-29T14:39:55.170271
+ALTER TABLE compoundsubmission ADD synonym TEXT;
+success!
+timestamp: 2017-03-29T14:40:53.490346
+ALTER TABLE compoundsubmission DROP COLUMN synonym;
+success!
+timestamp: 2017-03-29T14:49:20.362134
+ALTER TABLE compoundsubmission ADD synonym TEXT;
+success!
+timestamp: 2017-03-29T15:01:04.111148
+ALTER TABLE compoundsubmission DROP COLUMN synonym;
+success!
+timestamp: 2017-03-29T15:11:28.198141
+ALTER TABLE compoundsubmission ADD synonym TEXT;
+success!
+timestamp: 2017-04-26T14:44:08.316219
+ALTER TABLE tmpdoc ADD compoundsubmission_id INTEGER REFERENCES compoundsubmission (id) ON DELETE CASCADE  ;
+success!
+timestamp: 2017-04-26T15:00:11.324050
+CREATE TABLE tmprdkitstructure(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    rdkitstructure mol,
+    compoundsubmission_id INTEGER REFERENCES compoundsubmission (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2017-04-26T15:07:16.611435
+CREATE TABLE tmpmolstructure(
+    id SERIAL PRIMARY KEY,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    molstructure TEXT,
+    compoundsubmission_id INTEGER REFERENCES compoundsubmission (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2017-04-27T14:31:01.692127
+ALTER TABLE doc ADD isbn10 VARCHAR(512);
+timestamp: 2017-04-27T14:31:02.064354
+ALTER TABLE doc ADD issn VARCHAR(512);
+timestamp: 2017-04-27T14:31:02.069689
+ALTER TABLE doc DROP COLUMN isbn;
+success!
+timestamp: 2017-05-03T14:32:35.911063
+ALTER TABLE compoundsubmission ADD approved CHAR(1);
+success!
+timestamp: 2017-05-03T14:32:36.074727
+ALTER TABLE tmpdoc ADD approved CHAR(1);
+success!
+timestamp: 2017-05-03T16:37:53.622514
+ALTER TABLE compoundsubmission ADD imagepath TEXT;
+success!
+timestamp: 2017-05-05T17:15:34.908346
+ALTER TABLE compoundproperty DROP COLUMN molecularvolume;
+success!
+timestamp: 2017-05-10T11:47:22.493995
+ALTER TABLE compound ADD synonym_id TEXT;
+success!
+timestamp: 2017-05-10T11:47:22.770052
+ALTER TABLE synonym DROP COLUMN compound_id;
+success!
+timestamp: 2017-05-10T12:23:51.321074
+ALTER TABLE compound DROP COLUMN synonym_id;
+success!
+timestamp: 2017-05-10T12:23:51.362818
+ALTER TABLE synonym ADD compound_id INTEGER REFERENCES compound (id) ON DELETE CASCADE  ;
+success!
+timestamp: 2017-05-10T12:31:01.057701
+ALTER TABLE compound ADD synonym TEXT;
 success!

@@ -1,6 +1,7 @@
 # DOC functions (bibliography)
 #
 import urllib, json
+from datetime import datetime
 
 '''
 Import DOC information from DOI using CrossRef Api
@@ -11,7 +12,7 @@ def doi2doc(doi):
     data = json.load(response)
     doc = {}
     doc['journal']=data['message']['container-title'][0]
-    doc['year']=data['message']['deposited']['date-parts'][0][0]
+    doc['year']=datetime.strptime(str(data['message']['deposited']['date-parts'][0][0]), '%Y')
     doc['volume']=data['message']['volume']
     doc['issue']=data['message']['issue']
     

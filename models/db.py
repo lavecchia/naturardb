@@ -34,10 +34,10 @@ myconf = AppConfig(reload=True)
     #~ ## session.connect(request, response, db = MEMDB(Client()))
     #~ 
 db = DAL("postgres://fito:123456@localhost:5432/naturardb")
-#~ db = DAL("postgres://fito:123456@localhost/naturardb", migrate=True, fake_migrate=True,)
+#~ db = DAL("postgres://fito:123456@localhost:5432/naturardb", migrate=True, fake_migrate=True,)
 #~ db = DAL("postgres://fito:123456@localhost/naturardb", migrate=False, fake_migrate=True,)
 
-#~ db = DAL("postgres://fito:123456@localhost/naturardb", migrate=True)
+#~ db = DAL("postgres://fito:123456@localhost:5432/naturardb", migrate=True)
 
 #~ db = DAL("postgres://fito:123456@localhost/naturardb", lazy_tables=True)
 
@@ -165,7 +165,8 @@ db.define_table('doc',
     Field('firstpage', type='integer'),
     Field('lastpage', type='integer'),
     Field('doi', type='string'),
-    Field('isbn', type='string'),
+    Field('isbn10', type='string'),
+    Field('issn', type='string'),
     Field('pubmed_id'),
     Field('title', type='text'),
     Field('doctype', type='string'),
@@ -174,6 +175,7 @@ db.define_table('doc',
     Field('url', type='text'),
     )
 
+    
 
 # --------------------------------------------------------------------
 # COMPOUND INFORMATION
@@ -186,13 +188,14 @@ db.define_table('compound',
     auth.signature,
     #~ Field('compoundname', requires=IS_NOT_EMPTY()),
     #~ Field('iupacname', type='string'),
-    Field('inchi', type='string', readable=False, writable=False),
-    Field('inchikey', type='string', readable=False, writable=False),
-    Field('isosmiles', type='string'),
-    Field('cansmiles', type='string', readable=False, writable=False),
-    Field('imagepath', type='text', readable=False, writable=False),
-    Field('addinfo', type='text'), 
+    Field('inchi', type='string', readable=True, writable=False),
+    Field('inchikey', type='string', readable=True, writable=False),
+    Field('isosmiles', type='string', readable=True, writable=False, label=T('Isomeric Smiles')),
+    Field('cansmiles', type='string', readable=True, writable=False, label=T('Canonical Smiles')),
+    Field('imagepath', type='text', readable=False, writable=False, default='static/images_molecule/noimage.png'),
+    Field('addinfo', type='text', readable=False, writable=False), 
     Field('approved', type='boolean', readable=False, writable=False), 
+    Field('synonym', type='list:string', readable=True, writable=False, label=T('Names')),
     #~ format='c%(id)i-%(name)s',
     )
     
@@ -251,23 +254,23 @@ db.define_table('structure_descriptor',
     Field('descriptorvalue', type='decimal(10,4)'),
     )    
 
-'''
-Types of compound synomys
-'''
-db.define_table('synonymtype',
-    auth.signature,
-    Field('synonymtype', type='string'),
-    ) 
+#~ '''
+#~ Types of compound synomys
+#~ '''
+#~ db.define_table('synonymtype',
+    #~ auth.signature,
+    #~ Field('synonymtype', type='string'),
+    #~ ) 
 
-'''
-Store synonyms of compound names
-'''
-db.define_table('synonym',
-    auth.signature,
-    Field('synonymtype_id', 'reference synonymtype'),
-    Field('synonymname', type='string'),
-    Field('compound_id', 'reference compound'),
-    )    
+#~ '''
+#~ Store synonyms of compound names
+#~ '''
+#~ db.define_table('synonym',
+    #~ auth.signature,
+    #~ Field('synonymtype_id', 'reference synonymtype'),
+    #~ Field('synonymname', type='string'),
+    #~ Field('compound_id', 'reference compound'),
+    #~ )    
 
 '''
 List of compound classification, active.
@@ -327,19 +330,19 @@ List of calculated properties
 db.define_table('compoundproperty', 
     auth.signature,
     Field('compound_id', 'reference compound'),
-    Field('molecularweight', type='decimal(10,4)'),
-    Field('molecularformula', type='string'),
-    Field('molecularvolume', type='decimal(10,3)', label="volumen"),
-    Field('logp', type='decimal(10,4)'),
-    Field('tpsa', type='decimal(10,4)'),
-    Field('hbd', type='integer'),
-    Field('hba', type='integer'),
-    Field('numrotatable', type='integer'),
-    Field('numring', type='integer'),
-    Field('numn', type='integer'),
+    Field('molecularweight', type='decimal(10,4)', label=T('Molecular Weight')),
+    Field('molecularformula', type='string', label=T('Molecular Formula')),
+    #~ Field('molecularvolume', type='decimal(10,3)', label="volumen"),
+    Field('logp', type='decimal(10,4)', label=T('logP')),
+    Field('tpsa', type='decimal(10,4)', label=T('TPSA')),
+    Field('hbd', type='integer',  label=T('HB Donor')),
+    Field('hba', type='integer', label=T('B Acceptor')),
+    Field('numrotatable', type='integer', label=T('Rotatable Bonds')),
+    Field('numring', type='integer', label=T('Number of Rings')),
+    Field('numn', type='integer', label=T('num N')),
     Field('numo', type='integer'),
     Field('nums', type='integer'),
-    Field('numro5violation', type='integer'),
+    Field('numro5violation', type='integer', label=T('Lipinski rule violations')),
     )
 
 '''
@@ -657,22 +660,25 @@ db.define_table('compoundsubmission',
 	Field('inputsmiles', type='string'),
 	Field('inchi', type='string', readable=False, writable=False),
     Field('inchikey', type='string', readable=False, writable=False),
-    Field('isosmiles', type='string', readable=False, writable=False),
-    Field('cansmiles', type='string', readable=False, writable=False),
+    Field('isosmiles', type='string', readable=False, writable=False, label=T('Isomeric Smiles')),
+    Field('cansmiles', type='string', readable=False, writable=False, label=T('Canonical Smiles')),
     Field('molstructure', type='text', readable=False, writable=False),
     Field('rdkitstructure', type=mol, readable=False, writable=False),
 	Field('state', type='string', readable=False, writable=False),
     Field('addinfo', type='text', readable=False, writable=False),
+    Field('synonym', type='list:string', readable=True, writable=True, label=T('Names')),
+    Field('imagepath', type='text', readable=False, writable=False),
+    Field('approved', type='boolean', default=False, readable=False, writable=False),
     )
 
-'''
-Store temporal synonym names of submited compounds
-'''
-db.define_table('tmpsynonym',
-    auth.signature,
-    Field('synonymname', type='string'),
-    Field('compoundsubmission_id', 'reference compoundsubmission'),
-    )  
+#~ '''
+#~ Store temporal synonym names of submited compounds
+#~ '''
+#~ db.define_table('tmpsynonym',
+    #~ auth.signature,
+    #~ Field('synonymname', type='string'),
+    #~ Field('compoundsubmission_id', 'reference compoundsubmission'),
+    #~ )  
 
 '''
 Store temporal bibliographic information, this can be obtained from Crossref API
@@ -683,27 +689,22 @@ db.define_table('tmpdoc',
     Field('year', type='datetime', requires = IS_DATE(format=('%Y'))),
     Field('volume', type='integer'),
     Field('issue', type='integer'),
-    Field('firstpage', type='integer'),
-    Field('lastpage', type='integer'),
+    Field('firstpage', type='integer', label=T('first page')),
+    Field('lastpage', type='integer', label=T('last page')),
     Field('doi', type='string'),
     Field('isbn10', type='string'),
     Field('issn', type='string'),
     Field('pubmed_id'),
     Field('title', type='text'),
-    Field('doctype', type='string'),
+    Field('doctype', type='string', label=T('document type')),
     Field('authors'),
     Field('abstract', type='text'),
     Field('url', type='text'),
+    Field('compoundsubmission_id', 'reference compoundsubmission'),
+    Field('approved', type='boolean', default=False, readable=False, writable=False),
     )
     
-'''
-Many to many table relationship: Tmpdocs and Tmpcompounds
-'''
-db.define_table('tmpcompound_tmpdoc',
-    auth.signature,
-    Field('compoundsubmission_id', 'reference compoundsubmission'),
-    Field('doc_id', 'reference tmpdoc'),
-    )
+
 
 ## after defining tables, uncomment below to enable auditing
 #~ auth.enable_record_versioning(db)

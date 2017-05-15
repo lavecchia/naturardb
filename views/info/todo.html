@@ -1,0 +1,66 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+{{block header}}
+    <header class="container-fluid background">
+      <div class="jumbotron text-center">
+<!--
+        {{if response.title:}}
+        <h1>{{=response.title}}
+          <small>{{=response.subtitle or ''}}</small></h1>
+        {{pass}}
+-->
+      </div>
+    </header>
+{{end}}
+
+{{if 'message' in globals():}}
+<h2>{{=message}}</h2>
+<!--
+<p class="lead">{{=T('How did you get here?')}}</p>
+-->
+<!--
+<h2>ToDo list</h2>
+-->
+
+    <p>Lista de funciones a incorporar en el corto plazo:</p>
+
+    <ul>
+	<li>Filtro por propiedades.</li>
+	<li>Visualización 3D de las estructuras.</li>
+	<li>Selector de idiomas.</li>
+	<li>Carga de extractos y fuentes de origen, con la posibilidad de incluir sus usos conocidos en el campo de la medicina o alimentación.</li>
+	<li>Búsqueda y filtro de extractos y fuentes naturales.</li>
+	<li>Interfaz con la base de datos de compuestos PubChem.</li>
+	<li>Interfaz con la base de datos Catologue of Life10 para la selección de la especie de la fuente natural de origen.</li>
+	<li>Mensajería interna entre usuarios.</li>
+	<li>Listado de centros de investigación.</li>
+    </ul>
+
+{{elif 'content' in globals():}}
+{{=content}}
+{{else:}}
+{{=BEAUTIFY(response._vars)}}
+{{pass}}
+
+
+{{block right_sidebar}}
+<!--
+<div class="panel panel-info">
+
+
+   <h2>ToDo list<sup style="font-size:0.5em;">TM</sup></h2>
+
+    <p>Lista de funciones a incorporar en el corto plazo:</p>
+
+    <ul>
+      <li>Mensajería entre miembros</li>
+      <li>Conexión con exractos</li>
+    </ul>
+
+</div>
+-->
+{{end}}
+
+
+

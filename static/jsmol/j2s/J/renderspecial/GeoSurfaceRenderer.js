@@ -15,7 +15,7 @@ this.facePt3 =  new JU.P3 ();
 Clazz.overrideMethod (c$, "render", 
 function () {
 var gs = this.shape;
-this.iShowSolid = !(!this.vwr.checkMotionRendering (1113198597) && gs.ec.getDotsConvexMax () > 100);
+this.iShowSolid = !(!this.vwr.checkMotionRendering (1112150021) && gs.ec.getDotsConvexMax () > 100);
 if (!this.iShowSolid && !this.g3d.setC (4)) return false;
 var tCover = this.vwr.gdata.translucentCoverOnly;
 if (this.iShowSolid) this.vwr.gdata.translucentCoverOnly = true;
@@ -52,7 +52,7 @@ if (p1 >= mapMax || p2 >= mapMax || p3 >= mapMax || !points.get (p1) || !points.
 this.facePt1.set (coords[this.faceMap[p1]], coords[this.faceMap[p1] + 1], coords[this.faceMap[p1] + 2]);
 this.facePt2.set (coords[this.faceMap[p2]], coords[this.faceMap[p2] + 1], coords[this.faceMap[p2] + 2]);
 this.facePt3.set (coords[this.faceMap[p3]], coords[this.faceMap[p3] + 1], coords[this.faceMap[p3] + 2]);
-this.g3d.fillTriangle3CNBits (this.facePt1, this.colix, p1, this.facePt2, this.colix, p2, this.facePt3, this.colix, p3);
+this.g3d.fillTriangle3CNBits (this.facePt1, this.colix, p1, this.facePt2, this.colix, p2, this.facePt3, this.colix, p3, false);
 }
 }, "JU.BS");
 });

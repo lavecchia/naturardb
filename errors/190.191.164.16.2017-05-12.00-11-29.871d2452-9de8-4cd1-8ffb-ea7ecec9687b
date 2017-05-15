@@ -1,0 +1,916 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.NameError'> name 'download' is not defined"
+p3
+sS'layer'
+p4
+S'/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/views/compuestos/buscar.html'
+p5
+sS'code'
+p6
+S'response.write(\'\\n\', escape=False)\nresponse.write(\'<!DOCTYPE html>\\n<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="\', escape=False)\nresponse.write(T.accepted_language or \'en\')\nresponse.write(\'"> <!--<![endif]-->\\n  <head>\\n    <meta charset="utf-8">\\n    <!-- www.phpied.com/conditional-comments-block-downloads/ -->\\n    <!-- Always force latest IE rendering engine\\n         (even in intranet) & Chrome Frame\\n         Remove this if you use the .htaccess -->\\n    <meta http-equiv="X-UA-Compatible" content="IE=edge\', escape=False)\nresponse.write(not request.is_local and \',chrome=1\' or \'\')\nresponse.write(\'">\\n    <!--  Mobile Viewport Fix\\n          j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag\\n          device-width: Occupy full width of the screen in its current orientation\\n          initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height\\n          user-scalable = yes allows the user to zoom in -->\\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\\n    <title>\', escape=False)\nresponse.write(response.title or request.application)\nresponse.write(\'</title>\\n    <!-- http://dev.w3.org/html5/markup/meta.name.html -->\\n    <meta name="application-name" content="\', escape=False)\nresponse.write(request.application)\nresponse.write(\'">\\n    <!-- Speaking of Google, don\\\'t forget to set your site up:\\n         http://google.com/webmasters -->\\n    <meta name="google-site-verification" content="">\\n    <!-- include stylesheets -->\\n    <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',\'css/bootstrap.min.css\'))\nresponse.write(\'"/>\\n    <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',\'css/bootstrap-theme.min.css\'))\nresponse.write(\'"/>\\n    <link rel="stylesheet" href="\', escape=False)\nresponse.write(URL(\'static\',\'css/web2py-bootstrap3.css\'))\nresponse.write(\'"/>\\n    <link rel="shortcut icon" href="\', escape=False)\nresponse.write(URL(\'static\',\'images/favicon.ico\'))\nresponse.write(\'" type="image/x-icon">\\n    <link rel="apple-touch-icon" href="\', escape=False)\nresponse.write(URL(\'static\',\'images/favicon.png\'))\nresponse.write(\'">\\n    <!-- All JavaScript at the bottom, except for Modernizr which enables\\n         HTML5 elements & feature detects -->\\n    <script src="\', escape=False)\nresponse.write(URL(\'static\',\'js/modernizr-2.8.3.min.js\'))\nresponse.write(\'"></script>\\n       \\n       \\n    \\n    <!--[if lt IE 9]>\\n        <script src="\', escape=False)\nresponse.write(URL(\'static\',\'js/respond-1.4.2.min.js\'))\nresponse.write(\'"></script>\\n        <![endif]-->\\n    <!-- Favicons -->\\n    \', escape=False)\nresponse.write(\'<script type="text/javascript"><!--\\n    // These variables are used by the web2py_ajax_init function in web2py_ajax.js (which is loaded below).\\n    var w2p_ajax_confirm_message = "\', escape=False)\nresponse.write(T(\'Are you sure you want to delete this object?\'))\nresponse.write(\'";\\n    var w2p_ajax_disable_with_message = "\', escape=False)\nresponse.write(T(\'Working...\'))\nresponse.write(\'";\\n    var w2p_ajax_date_format = "\', escape=False)\nresponse.write(T(\'%Y-%m-%d\'))\nresponse.write(\'";\\n    var w2p_ajax_datetime_format = "\', escape=False)\nresponse.write(T(\'%Y-%m-%d %H:%M:%S\'))\nresponse.write(\'";\\n    var ajax_error_500 = \\\'\', escape=False)\nresponse.write(T.M(\'An error occured, please [[reload %s]] the page\') % URL(args=request.args, vars=request.get_vars))\nresponse.write("\'\\n    //--></script>\\n", escape=False)\nresponse.files.insert(0,URL(\'static\',\'js/jquery.js\'))\nresponse.files.insert(1,URL(\'static\',\'css/calendar.css\'))\nresponse.files.insert(2,URL(\'static\',\'js/calendar.js\'))\nresponse.files.insert(3,URL(\'static\',\'js/web2py.js\'))\n#http://sylvain-hamel.github.io/simple-expand/\nresponse.files.insert(4,URL(\'static\',\'js/simple-expand.js\'))\nresponse.files.insert(5,URL(\'static\',\'jsme/jsme.nocache.js\'))\nresponse.include_meta()\nresponse.include_files()\nresponse.write(\'\\n\', escape=False)\nresponse.write(\' <!-- this includes jquery.js, calendar.js/.css and web2py.js -->\\n    \', escape=False)\nresponse.write(\'\\n    \', escape=False)\n# using sidebars need to know what sidebar you want to use\nmc0 = \'col-md-12\'\nmc1 = \'col-md-9\'\nmc2 = \'col-md-6\'\nleft_sidebar_enabled = globals().get(\'left_sidebar_enabled\', False)\nright_sidebar_enabled = globals().get(\'right_sidebar_enabled\', False)\nmiddle_column = {0: mc0, 1: mc1, 2: mc2}[\n(left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]\nresponse.write(\'\\n  </head>\\n  <body>\\n    <!--[if lt IE 8]><p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->\\n    <div class="flash alert alert-dismissable">\', escape=False)\nresponse.write(response.flash or \'\')\nresponse.write(\'</div>\\n    <!-- Navbar ======================================= -->\\n    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">\\n      <div class="container-fluid">\\n        <div class="navbar-header">\\n          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">\\n            <span class="sr-only">Toggle navigation</span>\\n            <span class="icon-bar"></span>\\n            <span class="icon-bar"></span>\\n            <span class="icon-bar"></span>\\n          </button>\\n\\n          \', escape=False)\nresponse.write(response.logo or \'\')\nresponse.write(\'\\n        </div>\\n        <div class="collapse navbar-collapse navbar-ex1-collapse">\\n          <ul class="nav navbar-nav navbar-right">\\n            \', escape=False)\nresponse.write(\'auth\' in globals() and auth.navbar(\'Welcome\',mode=\'dropdown\') or \'\')\nresponse.write(\'\\n          </ul>\\n          \', escape=False)\nif response.menu:\n    response.write(\'\\n          \', escape=False)\n    response.write(MENU(response.menu, _class=\'nav navbar-nav\',li_class=\'dropdown\',ul_class=\'dropdown-menu\'))\n    response.write(\'\\n          \', escape=False)\n    pass\nresponse.write(\'\\n        </div>\\n      </div>\\n    </nav>\\n    <!-- Masthead ===================================== -->    \\n    \', escape=False)\nresponse.write(\'\\n    \', escape=False)\nresponse.write(\'\\n    <!-- Main ========================================= -->\\n    <!-- Begin page content -->\\n    <div class="container-fluid">\\n      \', escape=False)\nif left_sidebar_enabled:\n    response.write(\'\\n        <div class="col-md-3 left-sidebar">\\n            \', escape=False)\n    response.write(\'\\n            <h3>Left Sidebar</h3>\\n            <p></p>\\n            \', escape=False)\n    response.write(\'\\n        </div>\\n      \', escape=False)\n    pass\nresponse.write(\'\\n\\n      <div class="\', escape=False)\nresponse.write(middle_column)\nresponse.write(\'">\\n        \', escape=False)\nresponse.write(\'\\n        \', escape=False)\nresponse.write(\'\\n\\n\\n<style>\\n.img-zoom {\\n    text-align: center;\\n    width:210px;\\n    -webkit-transition: all .2s ease-in-out;\\n    -moz-transition: all .2s ease-in-out;\\n    -o-transition: all .2s ease-in-out;\\n    -ms-transition: all .2s ease-in-out;\\n}\\n\\n.transition {\\n    -webkit-transform: scale(2); \\n    -moz-transform: scale(2);\\n    -o-transform: scale(2);\\n    transform: scale(2);\\n}\\n\\n</style>\\n\\n\\n<!--\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',\'js/JSmolJME.js\'))\nresponse.write(\'"></script>\\n-->\\n<script type="text/javascript" src="\', escape=False)\nresponse.write(URL(\'static\',\'jsmol/JSmol.min.js\'))\nresponse.write(\'"></script>\\n<script type="text/javascript" src="http://163.10.79.164:8000/naturardb/static/jsmol/JSmol.min.js"></script>\\n\\n<!--\\nJMSE implementation\\n-->\\n<!--\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',\'jsme/jsme.nocache.js\'))\nresponse.write(\'"></script>\\n-->\\n<script>\\n//this function will be called after the JavaScriptApplet code has been loaded.\\nfunction jsmeOnLoad() {\\n    jsmeApplet = new JSApplet.JSME("jsme_container", "380px", "340px");\\n    jsmeApplet.showInfo("Naturar");\\n    jsmeApplet.setAfterStructureModifiedCallback(showEvent);\\n}    \\n\\nfunction showEvent(event) {\\n   //~ var log = document.getElementById("log");\\n   w2p_compound_keywords.value =  \\\'compound.cansmiles contains "\\\' + event.src.smiles() + \\\'"\\\';\\n}\\n</script>\\n\\n<!--\\n<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>\\n<script src="jquery.hoverImageEnlarge.js"></script> \\n-->\\n<script src="\', escape=False)\nresponse.write(URL(\'static\',\'js/simple-expand.js\'))\nresponse.write(\'"></script>\\n\\n\\n<!--\\nJSME visible solo en la pagina principal\\n-->\\n\', escape=False)\nif "view" in request.env.request_uri or "edit" in request.env.request_uri:\n    response.write(\' \\n<div class="vacio"></div>\\n<style>\\n.img-zoom {\\n    text-align: center;\\n    width:100px;\\n    margin:40px;\\n    -webkit-transition: all .2s ease-in-out;\\n    -moz-transition: all .2s ease-in-out;\\n    -o-transition: all .2s ease-in-out;\\n    -ms-transition: all .2s ease-in-out;\\n}\\n\\n\\n</style>\\n\', escape=False)\nelse:\n    response.write(\' \\n<div class="content"><div id="jsme_container"></div></div>\\n\', escape=False)\n    form[0][1][1].components.append(INPUT(_value=T(\'Draw Structure\'),_class="btn btn-default", _id="expander",_type="submit", _onclick=""))\n    response.write(\'\\n\', escape=False)\n    pass\nresponse.write("\\n\\n\\n<!--\\nzoom imagen de compuestos\\n-->\\n<script>\\n\\t\\t  $(document).ready(function(){\\n\\t\\t\\t$(\'.img-zoom\').hover(function() {\\n\\t\\t\\t\\t$(this).addClass(\'transition\');\\n \\n\\t\\t\\t}, function() {\\n\\t\\t\\t\\t$(this).removeClass(\'transition\');\\n\\t\\t\\t});\\n\\t\\t  });\\n</script>\\n\\n\\n", escape=False)\nresponse.write(BEAUTIFY(form))\nresponse.write(\'\\n\\n\', escape=False)\nif "view" in request.env.request_uri:\n    response.write(\' \\n\\n\\t\', escape=False)\n    download(mol_export(77))\n    response.write(\'\\n\\t\\n\\t\\n\\t\\n    <a id="expander_properties" \\n        data-expander-target=".properties_div" \\n        href="#">+ Propiedades \\n    </a>\\n    <div class="properties_div"> \\n        <div id="propiedades">\', escape=False)\n    response.write(BEAUTIFY(TABLE(*[TR(*rows) for rows in properties])))\n    response.write(\'</div>\\n    </div>\\n    <br>\\n\\n    \', escape=False)\n    if docs is not None:\n        response.write(\'\\n        <a id="expander_docs" \\n            data-expander-target=".docs_div" \\n            href="#">+ Referencias \\n        </a>\\n        <div class="docs_div"> \\n\\n            \', escape=False)\n        for doc in docs:\n            response.write(\'\\n                \', escape=False)\n            for key,value in doc.iteritems():\n                response.write(\'\\n                    \', escape=False)\n                if value is not None:\n                    response.write(\'\\n                        <div id="docs2">\', escape=False)\n                    response.write(BEAUTIFY(TABLE(*[TR(B(key) + " " + value) ])))\n                    response.write(\'</div>\\n                    \', escape=False)\n                    pass\n                response.write(\'\\n                \', escape=False)\n                pass\n            response.write(\'\\n\\n            </P>\\n            \', escape=False)\n            pass\n        response.write(\'\\n            \\n        </div>\\n    \', escape=False)\n        pass\n    response.write(\'\\n\', escape=False)\n    pass\nresponse.write("\\n\\n\\n<script>$(\'#expander\').simpleexpand();</script>\\n<script>$(\'#expander_properties\').simpleexpand();</script>\\n<script>$(\'#expander_docs\').simpleexpand();</script>\\n\\n\\n\\n\\n\\n", escape=False)\nresponse.write(\'\\n        \', escape=False)\nresponse.write(\'\\n      </div>\\n\\n      \', escape=False)\nif right_sidebar_enabled:\n    response.write(\'\\n        <div class="col-md-3">\\n            \', escape=False)\n    response.write(\'\\n            <h3>Right Sidebar</h3>\\n            <p></p>\\n            \', escape=False)\n    response.write(\'\\n        </div>\\n      \', escape=False)\n    pass\nresponse.write(\'\\n\\n    </div>\\n\\n    \', escape=False)\nresponse.write(\' <!-- this is default footer -->      \\n    <footer class="footer">\\n      <div class="container-fluid">\\n        <div class="copyright pull-left">\', escape=False)\nresponse.write(T(\'Copyleft\'))\nresponse.write(\' &#169; \', escape=False)\nresponse.write(request.now.year)\nresponse.write(\'</div>\\n<!--\\n          <div id="poweredBy" class="pull-right">\\n            \', escape=False)\nresponse.write(T(\'Powered by\'))\nresponse.write(\'\\n            <a href="http://www.web2py.com/">web2py</a>\\n          </div>\\n-->\\n      </div>\\n    </footer>\\n    \', escape=False)\nresponse.write(\'\\n    <!-- The javascript =============================== -->\\n    \\n    \\n    <script src="\', escape=False)\nresponse.write(URL(\'static\',\'js/bootstrap.min.js\'))\nresponse.write(\'"></script>\\n    <script src="\', escape=False)\nresponse.write(URL(\'static\',\'js/web2py-bootstrap3.js\'))\nresponse.write(\'"></script>\\n    \', escape=False)\nresponse.write(\'\\n    \', escape=False)\nif response.google_analytics_id:\n    response.write(\'\\n    <!-- Analytics ==================================== -->\\n    <script src="\', escape=False)\n    response.write(URL(\'static\',\'js/analytics.min.js\'))\n    response.write(\'"></script>\\n    <script type="text/javascript">\\n      analytics.initialize({\\n      \\\'Google Analytics\\\':{trackingId:\\\'\', escape=False)\n    response.write(response.google_analytics_id)\n    response.write("\'}\\n      });\\n    </script>\\n    ", escape=False)\n    pass\nresponse.write(\'\\n    <!-- Share ============================y============ -->\\n    <script src="\', escape=False)\nresponse.write(URL(\'static\',\'js/share.js\',vars=dict(static=URL(\'static\',\'images\'))))\nresponse.write(\'"></script>\\n  </body>\\n</html>\\n\', escape=False)'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__hash__'
+p12
+S"<method-wrapper '__hash__' of exceptions.NameError object>"
+p13
+sS'__setattr__'
+p14
+S"<method-wrapper '__setattr__' of exceptions.NameError object>"
+p15
+sS'__reduce_ex__'
+p16
+S'<built-in method __reduce_ex__ of exceptions.NameError object>'
+p17
+sS'__getslice__'
+p18
+S"<method-wrapper '__getslice__' of exceptions.NameError object>"
+p19
+sS'__getitem__'
+p20
+S"<method-wrapper '__getitem__' of exceptions.NameError object>"
+p21
+sS'__setstate__'
+p22
+S'<built-in method __setstate__ of exceptions.NameError object>'
+p23
+sS'args'
+p24
+S'("name \'download\' is not defined",)'
+p25
+sS'__reduce__'
+p26
+S'<built-in method __reduce__ of exceptions.NameError object>'
+p27
+sS'__str__'
+p28
+S"<method-wrapper '__str__' of exceptions.NameError object>"
+p29
+sS'__format__'
+p30
+S'<built-in method __format__ of exceptions.NameError object>'
+p31
+sS'__getattribute__'
+p32
+S"<method-wrapper '__getattribute__' of exceptions.NameError object>"
+p33
+sS'__class__'
+p34
+S"<type 'exceptions.NameError'>"
+p35
+sS'__unicode__'
+p36
+S'<built-in method __unicode__ of exceptions.NameError object>'
+p37
+sS'__delattr__'
+p38
+S"<method-wrapper '__delattr__' of exceptions.NameError object>"
+p39
+sS'__subclasshook__'
+p40
+S'<built-in method __subclasshook__ of type object>'
+p41
+sS'__repr__'
+p42
+S"<method-wrapper '__repr__' of exceptions.NameError object>"
+p43
+sS'__dict__'
+p44
+S'{}'
+p45
+sS'__sizeof__'
+p46
+S'<built-in method __sizeof__ of exceptions.NameError object>'
+p47
+sS'__doc__'
+p48
+S"'Name not found globally.'"
+p49
+sS'__init__'
+p50
+S"<method-wrapper '__init__' of exceptions.NameError object>"
+p51
+sS'__new__'
+p52
+S'<built-in method __new__ of type object>'
+p53
+ssS'evalue'
+p54
+S"name 'download' is not defined"
+p55
+sS'request'
+p56
+cgluon.html
+XML_unpickle
+p57
+(S's\x98U\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>naturardb</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>view</div></td></tr><tr><td><div>compound</div></td></tr><tr><td><div>77</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>190.191.164.16</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>compuestos</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">PHPSESSID</td><td style="vertical-align:top;">:</td><td><div>hfem9hudbm3thiimc7rn4fvm10<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_naturardb</td><td style="vertical-align:top;">:</td><td><div>190.191.164.16-e9894f15-d750-4d4b-bc65-9980766edd74<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>en-US,en;q=0.5</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>PHPSESSID=hfem9hudbm3thiimc7rn4fvm10; session_id_naturardb=190.191.164.16-e9894f15-d750-4d4b-bc65-9980766edd74</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>163.10.79.164:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_UPGRADE_INSECURE_REQUESTS</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/naturardb/compuestos/buscar/view/compound/77</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>190.191.164.16</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>33626</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SCRIPT_NAME</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>Atomus</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/admin/&#x27;, &#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/welcome/&#x27;, &#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/mjl/Dropbox/FITOMEDICINA/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x2acc62fdcc20: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;Atomus&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/mjl/Dropbox/FITOMEDICINA/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>en-US,en;q=0.5</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>PHPSESSID=hfem9hudbm3thiimc7rn4fvm10; session_id_naturardb=190.191.164.16-e9894f15-d750-4d4b-bc65-9980766edd74</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>163.10.79.164:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_upgrade_insecure_requests</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>Atomus</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/naturardb/compuestos/buscar/view/compound/77</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>190.191.164.16</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>33626</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/naturardb/compuestos/buscar/view/compound/77</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">script_name</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>Atomus</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/home/mjl/Dropbox/FITOMEDICINA/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.14.3-stable+timestamp.2016.03.26.23.02.02</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x2acc5ad131e0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x2acc62f8e668&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x2accae570dd0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x2acc5ad131e0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x2acc62f8e668&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x2accae570dd0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>buscar</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/admin/&#x27;, &#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/welcome/&#x27;, &#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/mjl/Dropbox/FITOMEDICINA/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x2acc62fdcc20: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;Atomus&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/mjl/Dropbox/FITOMEDICINA/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>Atomus</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.14.3-stable+timestamp.2016.03.26.23.02.02</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_scheduler</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 5, 12, 0, 11, 29, 525008)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_args</td><td style="vertical-align:top;">:</td><td><div>view/compound/77</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_extension</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/naturardb/compuestos/buscar/view/compound/77</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 5, 12, 3, 11, 29, 525025)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x2accaeaa9810&gt;</div></td></tr></table></div>'
+tRp58
+sS'frames'
+p59
+(lp60
+(dp61
+S'file'
+p62
+S'/home/mjl/Dropbox/FITOMEDICINA/web2py/gluon/restricted.py'
+p63
+sS'dump'
+p64
+(dp65
+S'environment'
+p66
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, ...}"
+p67
+sS'ccode'
+p68
+S'<code object <module> at 0x2accaeabccb0, file "/.../naturardb/views/compuestos/buscar.html", line 1>'
+p69
+ssS'lnum'
+p70
+I227
+sS'lines'
+p71
+(dp72
+I224
+S'            ccode = code'
+p73
+sI225
+S'        else:'
+p74
+sI226
+S'            ccode = compile2(code, layer)'
+p75
+sI227
+S'        exec ccode in environment'
+p76
+sI228
+S'    except HTTP:'
+p77
+sI229
+S'        raise'
+p78
+sI230
+S'    except RestrictedError:'
+p79
+sI231
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p80
+sI222
+S'    try:'
+p81
+sI223
+S'        if isinstance(code, types.CodeType):'
+p82
+ssS'call'
+p83
+S'(code=\'response.write(\\\'\\\\n\\\', escape=False)\\nresponse.writ..."></script>\\\\n  </body>\\\\n</html>\\\\n\\\', escape=False)\', environment={\'A\': <class \'gluon.html.A\'>, \'ANY_OF\': <class \'gluon.validators.ANY_OF\'>, \'ASSIGNJS\': <function ASSIGNJS>, \'AppConfig\': <function AppConfig>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'BUTTON\': <class \'gluon.html.BUTTON\'>, ...}, layer=\'/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/views/compuestos/buscar.html\')'
+p84
+sS'func'
+p85
+S'restricted'
+p86
+sa(dp87
+g62
+S'/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/views/compuestos/buscar.html'
+p88
+sg64
+(dp89
+S'download'
+p90
+S'undefined'
+p91
+sS'mol_export'
+p92
+S'<function mol_export>'
+p93
+ssg70
+I101
+sg71
+(dp94
+I96
+S'response.write("\\n\\n\\n<!--\\nzoom imagen de compuestos\\n-->\\n<script>\\n\\t\\t  $(document).ready(function(){\\n\\t\\t\\t$(\'.img-zoom\').hover(function() {\\n\\t\\t\\t\\t$(this).addClass(\'transition\');\\n \\n\\t\\t\\t}, function() {\\n\\t\\t\\t\\t$(this).removeClass(\'transition\');\\n\\t\\t\\t});\\n\\t\\t  });\\n</script>\\n\\n\\n", escape=False)'
+p95
+sI97
+S'response.write(BEAUTIFY(form))'
+p96
+sI98
+S"response.write('\\n\\n', escape=False)"
+p97
+sI99
+S'if "view" in request.env.request_uri:'
+p98
+sI100
+S"    response.write(' \\n\\n\\t', escape=False)"
+p99
+sI101
+S'    download(mol_export(77))'
+p100
+sI102
+S'    response.write(\'\\n\\t\\n\\t\\n\\t\\n    <a id="expander_properties" \\n        data-expander-target=".properties_div" \\n        href="#">+ Propiedades \\n    </a>\\n    <div class="properties_div"> \\n        <div id="propiedades">\', escape=False)'
+p101
+sI103
+S'    response.write(BEAUTIFY(TABLE(*[TR(*rows) for rows in properties])))'
+p102
+sI104
+S"    response.write('</div>\\n    </div>\\n    <br>\\n\\n    ', escape=False)"
+p103
+sI105
+S'    if docs is not None:'
+p104
+sI106
+S'        response.write(\'\\n        <a id="expander_docs" \\n            data-expander-target=".docs_div" \\n            href="#">+ Referencias \\n        </a>\\n        <div class="docs_div"> \\n\\n            \', escape=False)'
+p105
+sI107
+S'        for doc in docs:'
+p106
+sI108
+S"            response.write('\\n                ', escape=False)"
+p107
+sI109
+S'            for key,value in doc.iteritems():'
+p108
+sI110
+S"                response.write('\\n                    ', escape=False)"
+p109
+sI111
+S'                if value is not None:'
+p110
+sI92
+S'    response.write(\' \\n<div class="content"><div id="jsme_container"></div></div>\\n\', escape=False)'
+p111
+sI93
+S'    form[0][1][1].components.append(INPUT(_value=T(\'Draw Structure\'),_class="btn btn-default", _id="expander",_type="submit", _onclick=""))'
+p112
+sI94
+S"    response.write('\\n', escape=False)"
+p113
+sI95
+S'    pass'
+p114
+ssg83
+S'()'
+p115
+sg85
+S'<module>'
+p116
+sasS'pyver'
+p117
+S'Python 2.7.13: /home/mjl/anaconda2/envs/my-rdkit-env/bin/python (prefix: /home/mjl/anaconda2/envs/my-rdkit-env)'
+p118
+sS'session'
+p119
+g57
+(S's\x1a\x00\x00\x00<div><table></table></div>'
+tRp120
+sS'etype'
+p121
+S"<type 'exceptions.NameError'>"
+p122
+sS'date'
+p123
+S'Fri May 12 00:11:29 2017'
+p124
+sS'response'
+p125
+g57
+(S's\x17#\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x2accae564ed8&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_naturardb</td><td style="vertical-align:top;">:</td><td><div>190.191.164.16-e9894f15-d750-4d4b-bc65-9980766edd74<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>/naturardb/static/js/jquery.js</div></td></tr><tr><td><div>/naturardb/static/css/calendar.css</div></td></tr><tr><td><div>/naturardb/static/js/calendar.js</div></td></tr><tr><td><div>/naturardb/static/js/web2py.js</div></td></tr><tr><td><div>/naturardb/static/js/simple-expand.js</div></td></tr><tr><td><div>/naturardb/static/jsme/jsme.nocache.js</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap3_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">google_analytics_id</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">logo</td><td style="vertical-align:top;">:</td><td><div><a><img href="/naturardb/default/index" src="/naturardb/static/images/icon.png" /></a></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div><table><tr><td><div>Home</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/naturardb/default/index</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Research Groups</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/naturardb/groups/list</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Compounds</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/naturardb/compuestos/buscar</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>+Info</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Changelog</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/naturardb/info/changelog</div></td></tr><tr><td><div>[]</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>ToDo list</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/naturardb/info/todo</div></td></tr><tr><td><div>[]</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">author</td><td style="vertical-align:top;">:</td><td><div>Laboratorio de Qu\xc3\xadmica Te\xc3\xb3rica - LQT - lavecchia.at.gmail.com</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">description</td><td style="vertical-align:top;">:</td><td><div>NaturAr: base de datos de compuestos naturales de la Argentina</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generator</td><td style="vertical-align:top;">:</td><td><div>NaturAr</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">keywords</td><td style="vertical-align:top;">:</td><td><div>compuestos naturales, base de datos, estructura molecular, mol\xc3\xa9culas</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^compuestos/\\w+\\.py$</div></td></tr><tr><td><div>^compuestos/buscar/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>190.191.164.16</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_naturardb</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/sessions/1de/05f/190.191.164.16-e9894f15-d750-4d4b-bc65-9980766edd74&#x27;, mode &#x27;rb+&#x27; at 0x2accaded24b0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/sessions/190.191.164.16-e9894f15-d750-4d4b-bc65-9980766edd74</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>2901bbb9f91448010f41e833d4f2be75</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>190.191.164.16-e9894f15-d750-4d4b-bc65-9980766edd74</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_naturardb</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_locked</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>naturardb</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">subtitle</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">title</td><td style="vertical-align:top;">:</td><td><div>Naturardb</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>compuestos/buscar.html</div></td></tr></table></div>'
+tRp126
+sS'locals'
+p127
+(dp128
+S'Service'
+p129
+S"<class 'gluon.tools.Service'>"
+p130
+sS'SQLCustomType'
+p131
+S"<class 'pydal.helpers.classes.SQLCustomType'>"
+p132
+sS'OBJECT'
+p133
+S"<class 'gluon.html.OBJECT'>"
+p134
+sS'SQLDB'
+p135
+S"<class 'pydal.base.DAL'>"
+p136
+sg119
+S"<Storage {'_web2py_grid_referrer_compound': '/naturardb/compuestos/buscar'}>"
+p137
+sS'LINK'
+p138
+S"<class 'gluon.html.LINK'>"
+p139
+sS'Auth'
+p140
+S"<class 'gluon.tools.Auth'>"
+p141
+sS'BR'
+p142
+S"<class 'gluon.html.BR'>"
+p143
+sS'local_import'
+p144
+S'<function <lambda>>'
+p145
+sS'OPTGROUP'
+p146
+S"<class 'gluon.html.OPTGROUP'>"
+p147
+sS'__package__'
+p148
+S'None'
+p149
+sS'PRE'
+p150
+S"<class 'gluon.html.PRE'>"
+p151
+sS'IS_INT_IN_RANGE'
+p152
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p153
+sS'left_sidebar_enabled'
+p154
+S'False'
+p155
+sS'IS_LOWER'
+p156
+S"<class 'gluon.validators.IS_LOWER'>"
+p157
+sS'IS_STRONG'
+p158
+S"<class 'gluon.validators.IS_STRONG'>"
+p159
+sS'cache'
+p160
+S'<gluon.cache.Cache object>'
+p161
+sS'IS_IN_DB'
+p162
+S"<class 'gluon.validators.IS_IN_DB'>"
+p163
+sS'TAG'
+p164
+S'<gluon.html.__TAG__ object>'
+p165
+sS'SQLField'
+p166
+S"<class 'pydal.objects.Field'>"
+p167
+sS'mail'
+p168
+S'<gluon.tools.Mail object>'
+p169
+sS'BODY'
+p170
+S"<class 'gluon.html.BODY'>"
+p171
+sS'IS_DATE_IN_RANGE'
+p172
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p173
+sS'IFRAME'
+p174
+S"<class 'gluon.html.IFRAME'>"
+p175
+sS'URL'
+p176
+S'<function URL>'
+p177
+sS'docs'
+p178
+S'None'
+p179
+sS'__file__'
+p180
+S"'/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/views/compuestos/buscar.html'"
+p181
+sS'db'
+p182
+S'<DAL uri="postgres:******@localhost:5432/naturardb">'
+p183
+sS'auth'
+p184
+S'<gluon.tools.Auth object>'
+p185
+sS'P'
+S"<class 'gluon.html.P'>"
+p186
+sS'TFOOT'
+p187
+S"<class 'gluon.html.TFOOT'>"
+p188
+sS'mol'
+p189
+S'<pydal.helpers.classes.SQLCustomType object>'
+p190
+sS'XHTML'
+p191
+S"<class 'gluon.html.XHTML'>"
+p192
+sS'ON'
+p193
+S'True'
+p194
+sS'OL'
+p195
+S"<class 'gluon.html.OL'>"
+p196
+sS'TEXTAREA'
+p197
+S"<class 'gluon.html.TEXTAREA'>"
+p198
+sS'settings'
+p199
+S"<Row {'imagedir': 'static/images_molecule/', 'id': 1L}>"
+p200
+sS'MENU'
+p201
+S"<class 'gluon.html.MENU'>"
+p202
+sS'create_molimage'
+p203
+S'<function create_molimage>'
+p204
+sS'STYLE'
+p205
+S"<class 'gluon.html.STYLE'>"
+p206
+sS'IS_IMAGE'
+p207
+S"<class 'gluon.validators.IS_IMAGE'>"
+p208
+sS'EM'
+p209
+S"<class 'gluon.html.EM'>"
+p210
+sS'CODE'
+p211
+S"<class 'gluon.html.CODE'>"
+p212
+sS'HTTP'
+p213
+S"<class 'gluon.http.HTTP'>"
+p214
+sS'HR'
+p215
+S"<class 'gluon.html.HR'>"
+p216
+sS'IS_DATETIME'
+p217
+S"<class 'gluon.validators.IS_DATETIME'>"
+p218
+sS'input2doc'
+p219
+S'<function input2doc>'
+p220
+sS'mol_export'
+p221
+S'<function mol_export>'
+p222
+sS'CLEANUP'
+p223
+S"<class 'gluon.validators.CLEANUP'>"
+p224
+sS'plugins'
+p225
+S'<gluon.tools.PluginManager object>'
+p226
+sS'SELECT'
+p227
+S"<class 'gluon.html.SELECT'>"
+p228
+sS'calculate_descriptors'
+p229
+S'<function calculate_descriptors>'
+p230
+sS'CENTER'
+p231
+S"<class 'gluon.html.CENTER'>"
+p232
+sS'plugin_manage_groups'
+p233
+S'None'
+p234
+sS'urllib'
+p235
+S"<module 'urllib' from '/home/mjl/anaconda2/envs/my-rdkit-env/lib/python2.7/urllib.pyc'>"
+p236
+sS'DEVELOPMENT_MENU'
+p237
+g155
+sS'IS_EQUAL_TO'
+p238
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p239
+sS'HTML'
+p240
+S"<class 'gluon.html.HTML'>"
+p241
+sS'SQLFORM'
+p242
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p243
+sS'LOAD'
+p244
+S'<function LOAD>'
+p245
+sS'redirect'
+p246
+S'<function redirect>'
+p247
+sS'FIELDSET'
+p248
+S"<class 'gluon.html.FIELDSET'>"
+p249
+sS'__builtins__'
+p250
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'BufferError': <type 'exceptions.BufferError'>, 'BytesWarning': <type 'exceptions.BytesWarning'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, ...}"
+p251
+sS'embed64'
+p252
+S'<function embed64>'
+p253
+sS'IS_LIST_OF'
+p254
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p255
+sS'__name__'
+p256
+S"'__restricted__'"
+p257
+sS'EMBED'
+p258
+S"<class 'gluon.html.EMBED'>"
+p259
+sS'properties'
+p260
+S'<gluon.html.TABLE object>'
+p261
+sS'_'
+S'<function _>'
+p262
+sS'myconf'
+p263
+S"{'forms': {'formstyle': 'bootstrap3_inline', 'se...'you@gmail.com', 'server': 'smtp.gmail.com:587'}}"
+p264
+sS'H2'
+p265
+S"<class 'gluon.html.H2'>"
+p266
+sS'H3'
+p267
+S"<class 'gluon.html.H3'>"
+p268
+sS'AppConfig'
+p269
+S'<function AppConfig>'
+p270
+sS'H1'
+p271
+S"<class 'gluon.html.H1'>"
+p272
+sS'H6'
+p273
+S"<class 'gluon.html.H6'>"
+p274
+sS'H4'
+p275
+S"<class 'gluon.html.H4'>"
+p276
+sS'doi2doc'
+p277
+S'<function doi2doc>'
+p278
+sS'UL'
+p279
+S"<class 'gluon.html.UL'>"
+p280
+sS'IS_UPPER'
+p281
+S"<class 'gluon.validators.IS_UPPER'>"
+p282
+sS'xmlescape'
+p283
+S'<function xmlescape>'
+p284
+sS'IS_TIME'
+p285
+S"<class 'gluon.validators.IS_TIME'>"
+p286
+sS'isbn2doc'
+p287
+S'<function isbn2doc>'
+p288
+sS'OPTION'
+p289
+S"<class 'gluon.html.OPTION'>"
+p290
+sS'TITLE'
+p291
+S"<class 'gluon.html.TITLE'>"
+p292
+sS'CRYPT'
+p293
+S"<class 'gluon.validators.CRYPT'>"
+p294
+sS'IS_EMPTY_OR'
+p295
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p296
+sS'MARKMIN'
+p297
+S"<class 'gluon.html.MARKMIN'>"
+p298
+sS'ASSIGNJS'
+p299
+S'<function ASSIGNJS>'
+p300
+sS'INPUT'
+p301
+S"<class 'gluon.html.INPUT'>"
+p302
+sS'STRONG'
+p303
+S"<class 'gluon.html.STRONG'>"
+p304
+sS'COL'
+p305
+S"<class 'gluon.html.COL'>"
+p306
+sS'mc1'
+p307
+S"'col-md-9'"
+p308
+sS'mc0'
+p309
+S"'col-md-12'"
+p310
+sS'service'
+p311
+S'<gluon.tools.Service object>'
+p312
+sS'SCRIPT'
+p313
+S"<class 'gluon.html.SCRIPT'>"
+p314
+sS'Descriptors'
+p315
+S"<module 'rdkit.Chem.Descriptors' from '/home/mjl...hon2.7/site-packages/rdkit/Chem/Descriptors.pyc'>"
+p316
+sS'json'
+p317
+S"<module 'json' from '/home/mjl/anaconda2/envs/my-rdkit-env/lib/python2.7/json/__init__.pyc'>"
+p318
+sS'TABLE'
+p319
+S"<class 'gluon.html.TABLE'>"
+p320
+sS'IS_IPV4'
+p321
+S"<class 'gluon.validators.IS_IPV4'>"
+p322
+sS'IS_LENGTH'
+p323
+S"<class 'gluon.validators.IS_LENGTH'>"
+p324
+sS'IS_IPV6'
+p325
+S"<class 'gluon.validators.IS_IPV6'>"
+p326
+sS'XML'
+p327
+S"<class 'gluon.html.XML'>"
+p328
+sS'B'
+S"<class 'gluon.html.B'>"
+p329
+sS'IMG'
+p330
+S"<class 'gluon.html.IMG'>"
+p331
+sS'SQLTABLE'
+p332
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p333
+sS'IS_MATCH'
+p334
+S"<class 'gluon.validators.IS_MATCH'>"
+p335
+sS'IS_ALPHANUMERIC'
+p336
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p337
+sS'LABEL'
+p338
+S"<class 'gluon.html.LABEL'>"
+p339
+sS'SPAN'
+p340
+S"<class 'gluon.html.SPAN'>"
+p341
+sS'IS_JSON'
+p342
+S"<class 'gluon.validators.IS_JSON'>"
+p343
+sS'IS_IPADDRESS'
+p344
+S"<class 'gluon.validators.IS_IPADDRESS'>"
+p345
+sS'IS_SLUG'
+p346
+S"<class 'gluon.validators.IS_SLUG'>"
+p347
+sS'BEAUTIFY'
+p348
+S"<class 'gluon.html.BEAUTIFY'>"
+p349
+sS'META'
+p350
+S"<class 'gluon.html.META'>"
+p351
+sS'BUTTON'
+p352
+S"<class 'gluon.html.BUTTON'>"
+p353
+sS'IS_DATE'
+p354
+S"<class 'gluon.validators.IS_DATE'>"
+p355
+sS'IS_EMAIL'
+p356
+S"<class 'gluon.validators.IS_EMAIL'>"
+p357
+sS'middle_column'
+p358
+S"'col-md-12'"
+p359
+sS'IS_NOT_EMPTY'
+p360
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p361
+sS'IS_FLOAT_IN_RANGE'
+p362
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p363
+sS'TBODY'
+p364
+S"<class 'gluon.html.TBODY'>"
+p365
+sS'CAT'
+p366
+S"<class 'gluon.html.CAT'>"
+p367
+sS'Field'
+p368
+S"<class 'pydal.objects.Field'>"
+p369
+sS'mc2'
+p370
+S"'col-md-6'"
+p371
+sS'IS_LIST_OF_EMAILS'
+p372
+S"<class 'gluon.validators.IS_LIST_OF_EMAILS'>"
+p373
+sS'DIV'
+p374
+S"<class 'gluon.html.DIV'>"
+p375
+sS'H5'
+p376
+S"<class 'gluon.html.H5'>"
+p377
+sS'LEGEND'
+p378
+S"<class 'gluon.html.LEGEND'>"
+p379
+sS'form'
+p380
+S'<gluon.html.DIV object>'
+p381
+sS'COLGROUP'
+p382
+S"<class 'gluon.html.COLGROUP'>"
+p383
+sS'DAL'
+p384
+S"<class 'pydal.base.DAL'>"
+p385
+sS'is_valid_smiles'
+p386
+S'<function is_valid_smiles>'
+p387
+sS'TR'
+p388
+S"<class 'gluon.html.TR'>"
+p389
+sS'LI'
+p390
+S"<class 'gluon.html.LI'>"
+p391
+sS'right_sidebar_enabled'
+p392
+g155
+sS'TH'
+p393
+S"<class 'gluon.html.TH'>"
+p394
+sS'TD'
+p395
+S"<class 'gluon.html.TD'>"
+p396
+sS'PluginManager'
+p397
+S"<class 'gluon.tools.PluginManager'>"
+p398
+sS'IS_URL'
+p399
+S"<class 'gluon.validators.IS_URL'>"
+p400
+sS'A'
+S"<class 'gluon.html.A'>"
+p401
+sS'HEAD'
+p402
+S"<class 'gluon.html.HEAD'>"
+p403
+sS'IS_DATETIME_IN_RANGE'
+p404
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p405
+sS'FORM'
+p406
+S"<class 'gluon.html.FORM'>"
+p407
+sS'I'
+S"<class 'gluon.html.I'>"
+p408
+sS'is_valid_ctab'
+p409
+S'<function is_valid_ctab>'
+p410
+sS'IS_NOT_IN_DB'
+p411
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p412
+sg125
+S"<Storage {'body': <cStringIO.StringO object at 0...2accaec21de8>, 'view': 'compuestos/buscar.html'}>"
+p413
+sS'THEAD'
+p414
+S"<class 'gluon.html.THEAD'>"
+p415
+sS'ANY_OF'
+p416
+S"<class 'gluon.validators.ANY_OF'>"
+p417
+sS'IS_NULL_OR'
+p418
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p419
+sg56
+S"<Storage {'_vars': None, 'function': 'buscar', '...ox/FITOMEDICINA/web2py/applications/naturardb/'}>"
+p420
+sS'IS_EXPR'
+p421
+S"<class 'gluon.validators.IS_EXPR'>"
+p422
+sS'T'
+S'<gluon.languages.translator object>'
+p423
+sS'rows_transpose'
+p424
+S'<function rows_transpose>'
+p425
+sS'IS_IN_SET'
+p426
+S"<class 'gluon.validators.IS_IN_SET'>"
+p427
+sS'IS_UPLOAD_FILENAME'
+p428
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p429
+sS'Chem'
+p430
+S"<module 'rdkit.Chem' from '/home/mjl/anaconda2/e...python2.7/site-packages/rdkit/Chem/__init__.pyc'>"
+p431
+sS'TT'
+p432
+S"<class 'gluon.html.TT'>"
+p433
+sS'IS_DECIMAL_IN_RANGE'
+p434
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p435
+sssS'traceback'
+p436
+S'Traceback (most recent call last):\n  File "/home/mjl/Dropbox/FITOMEDICINA/web2py/gluon/restricted.py", line 227, in restricted\n    exec ccode in environment\n  File "/home/mjl/Dropbox/FITOMEDICINA/web2py/applications/naturardb/views/compuestos/buscar.html", line 101, in <module>\n    {{download(mol_export(77))}}\nNameError: name \'download\' is not defined\n'
+p437
+s.

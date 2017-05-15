@@ -1,0 +1,58 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+{{block header}}
+    <header class="container-fluid background">
+      <div class="jumbotron text-center">
+<!--
+        {{if response.title:}}
+        <h1>{{=response.title}}
+          <small>{{=response.subtitle or ''}}</small></h1>
+        {{pass}}
+-->
+      </div>
+    </header>
+{{end}}
+
+{{if 'message' in globals():}}
+<h2>{{=message}}</h2>
+<!--
+<p class="lead">{{=T('How did you get here?')}}</p>
+-->
+<!--
+<h2>ToDo list</h2>
+-->
+
+    <p>Esta base de datos surge como un proyecto desarrollado en el Grupo de Química Teórica del CEQUINOR (Centro de Química Inorgánica)</p>
+	<p>Repositorio de NaturAr: <a href="https://github.com/lavecchia/naturardb">https://github.com/lavecchia/naturardb</a></p>
+	
+	<p>Cualquier sugerencia o consulta no dude en escribirnos por favor a naturardb.at.gmail.com</p>
+	
+
+{{elif 'content' in globals():}}
+{{=content}}
+{{else:}}
+{{=BEAUTIFY(response._vars)}}
+{{pass}}
+
+
+{{block right_sidebar}}
+<!--
+<div class="panel panel-info">
+
+
+   <h2>ToDo list<sup style="font-size:0.5em;">TM</sup></h2>
+
+    <p>Lista de funciones a incorporar en el corto plazo:</p>
+
+    <ul>
+      <li>Mensajería entre miembros</li>
+      <li>Conexión con exractos</li>
+    </ul>
+
+</div>
+-->
+{{end}}
+
+
+

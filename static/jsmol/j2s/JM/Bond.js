@@ -40,12 +40,8 @@ return (this.order & 1023) != 0;
 });
 Clazz.overrideMethod (c$, "isHydrogen", 
 function () {
-return JM.Bond.isOrderH (this.order);
+return JU.Edge.isOrderH (this.order);
 });
-c$.isOrderH = Clazz.defineMethod (c$, "isOrderH", 
-function (order) {
-return (order & 30720) != 0;
-}, "~N");
 Clazz.defineMethod (c$, "isStereo", 
 function () {
 return (this.order & 1024) != 0;
@@ -57,10 +53,6 @@ return (this.order & 224) != 0;
 Clazz.defineMethod (c$, "isAromatic", 
 function () {
 return (this.order & 512) != 0;
-});
-Clazz.defineMethod (c$, "isPymolStyle", 
-function () {
-return (this.order & 98304) == 98304;
 });
 Clazz.defineMethod (c$, "getEnergy", 
 function () {
@@ -108,8 +100,47 @@ return (this.order & -131073) == bondType;
 }, "~N");
 Clazz.overrideMethod (c$, "getOtherAtomNode", 
 function (thisAtom) {
-return (this.atom1 === thisAtom ? this.atom2 : this.atom2 === thisAtom ? this.atom1 : null);
+return (this.atom1 === thisAtom ? this.atom2 : this.atom2 === thisAtom || thisAtom == null ? this.atom1 : null);
 }, "JU.Node");
+Clazz.defineMethod (c$, "setAtropisomerOptions", 
+function (bsA, bsB) {
+var isBA = bsB.get (this.atom1.i);
+var bs1 = (isBA ? bsB : bsA);
+var bs2 = (isBA ? bsA : bsB);
+var i1;
+var i2 = 2147483647;
+var bonds = this.atom1.bonds;
+for (i1 = 0; i1 < bonds.length; i1++) {
+var a = bonds[i1].getOtherAtom (this.atom1);
+if (bs1.get (a.i) && a !== this.atom2) break;
+}
+if (i1 < bonds.length) {
+bonds = this.atom2.bonds;
+for (i2 = 0; i2 < bonds.length; i2++) {
+var a = bonds[i2].getOtherAtom (this.atom2);
+if (bs2.get (a.i) && a !== this.atom1) break;
+}
+}this.order = (i1 > 2 || i2 >= bonds.length || i2 > 2 ? 1 : JU.Edge.getAtropismOrder (i1 + 1, i2 + 1));
+}, "JU.BS,JU.BS");
+Clazz.overrideMethod (c$, "getCIPChirality", 
+function (doCalculate) {
+var flags = (this.order & 786432) >> 18;
+if (flags == 0 && this.getCovalentOrder () == 2 && doCalculate) {
+flags = this.atom1.group.chain.model.ms.getBondCIPChirality (this);
+this.order |= ((flags == 0 ? 3 : flags) << 18);
+}switch (flags) {
+case 524288:
+return "E";
+case 262144:
+return "Z";
+default:
+return "";
+}
+}, "~B");
+Clazz.overrideMethod (c$, "setCIPChirality", 
+function (c) {
+this.order = ((this.order & -786433) | (c << 18));
+}, "~N");
 Clazz.overrideMethod (c$, "toString", 
 function () {
 return this.atom1 + " - " + this.atom2;

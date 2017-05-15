@@ -5,17 +5,15 @@
 ## Customize your APP title, subtitle and menus here
 #########################################################################
 
-response.logo = A(B('web',SPAN(2),'py'),XML('&trade;&nbsp;'),
-                  _class="navbar-brand",_href="http://www.natur.ar/",
-                  _id="web2py-logo")
+response.logo = A(IMG(_src=URL('static', 'images/icon.png'),_href=URL('default', 'index')))
 response.title = request.application.replace('_',' ').title()
 response.subtitle = ''
 
 ## read more at http://dev.w3.org/html5/markup/meta.name.html
-response.meta.author = 'Your Name <you@example.com>'
-response.meta.description = 'a cool new app'
-response.meta.keywords = 'web2py, python, framework'
-response.meta.generator = 'Web2py Web Framework'
+response.meta.author = 'Laboratorio de Química Teórica - LQT - lavecchia.at.gmail.com'
+response.meta.description = 'NaturAr: base de datos de compuestos naturales de la Argentina'
+response.meta.keywords = 'compuestos naturales, base de datos, estructura molecular, moléculas'
+response.meta.generator = 'NaturAr'
 
 ## your http://google.com/analytics id
 response.google_analytics_id = None
@@ -26,15 +24,23 @@ response.google_analytics_id = None
 
 response.menu = [
     (T('Home'), False, URL('default', 'index'), []),
-    (T('Research Groups'), False, URL('groups', 'list'), []),
-    (T('Compounds'), False, URL('data', 'compounds'), []),
-    (T('Extracts'), False, URL('data', 'extracts'), [])
-]
+    #~ (T('Research Groups'), False, URL('groups', 'list'), []),
+    (T('Compounds'), False, URL('compuestos', 'buscar'), []),
+    (T('+Info'), False, None, [
+		#~ (T('Changelog'), False, URL('info', 'changelog'), []),
+        (T('ToDo list'), False, URL('info', 'todo'), []),
+		(T('About NaturAr'), False, URL('info', 'about'), []),
+    ]),
+    #~ (T('Extracts'), False, URL('extracts', 'buscar'), [])
+	]
 
 if auth.is_logged_in():
-    response.menu += [
-        (T('Messaging'), False, URL('messaging', 'inbox'), [])
-        ]
+    response.menu.extend(
+        [(T('Submission'), False, None, [(T('Compound'), False, URL('submission', 'submit_compound',[]))])]
+        )
+    #~ response.menu.extend(
+        #~ [(T('Messaging'), False, URL('messaging', 'inbox'), [])]
+        #~ )
 
 
 
@@ -81,67 +87,7 @@ def _():
               (T('About'), False, URL(
                'admin', 'default', 'about/' + app)),
               ]),
-          #~ ('web2py.com', False, '#', [
-             #~ (T('Download'), False,
-              #~ 'http://www.web2py.com/examples/default/download'),
-             #~ (T('Support'), False,
-              #~ 'http://www.web2py.com/examples/default/support'),
-             #~ (T('Demo'), False, 'http://web2py.com/demo_admin'),
-             #~ (T('Quick Examples'), False,
-              #~ 'http://web2py.com/examples/default/examples'),
-             #~ (T('FAQ'), False, 'http://web2py.com/AlterEgo'),
-             #~ (T('Videos'), False,
-              #~ 'http://www.web2py.com/examples/default/videos/'),
-             #~ (T('Free Applications'),
-              #~ False, 'http://web2py.com/appliances'),
-             #~ (T('Plugins'), False, 'http://web2py.com/plugins'),
-             #~ (T('Recipes'), False, 'http://web2pyslices.com/'),
-             #~ ]),
-          #~ (T('Documentation'), False, '#', [
-             #~ (T('Online book'), False, 'http://www.web2py.com/book'),
-             #~ LI(_class="divider"),
-             #~ (T('Preface'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/00'),
-             #~ (T('Introduction'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/01'),
-             #~ (T('Python'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/02'),
-             #~ (T('Overview'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/03'),
-             #~ (T('The Core'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/04'),
-             #~ (T('The Views'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/05'),
-             #~ (T('Database'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/06'),
-             #~ (T('Forms and Validators'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/07'),
-             #~ (T('Email and SMS'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/08'),
-             #~ (T('Access Control'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/09'),
-             #~ (T('Services'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/10'),
-             #~ (T('Ajax Recipes'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/11'),
-             #~ (T('Components and Plugins'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/12'),
-             #~ (T('Deployment Recipes'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/13'),
-             #~ (T('Other Recipes'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/14'),
-             #~ (T('Helping web2py'), False,
-              #~ 'http://www.web2py.com/book/default/chapter/15'),
-             #~ (T("Buy web2py's book"), False,
-              #~ 'http://stores.lulu.com/web2py'),
-             #~ ]),
-          #~ (T('Community'), False, None, [
-             #~ (T('Groups'), False,
-              #~ 'http://www.web2py.com/examples/default/usergroups'),
-              #~ (T('Twitter'), False, 'http://twitter.com/web2py'),
-              #~ (T('Live Chat'), False,
-               #~ 'http://webchat.freenode.net/?channels=web2py'),
-              #~ ]),
+          
         ]
 if DEVELOPMENT_MENU: _()
 

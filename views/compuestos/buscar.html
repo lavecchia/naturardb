@@ -22,8 +22,13 @@
 </style>
 
 
+<!--
 <script src="{{=URL('static','js/JSmolJME.js')}}"></script>
-<script src="{{=URL('static','jsmol/JSmol.min.js')}}"></script>
+-->
+<!--
+<script type="text/javascript" src="{{=URL('static','jsmol/JSmol.min.js')}}"></script>
+<script type="text/javascript" src="http://163.10.79.164:8000/naturardb/static/jsmol/JSmol.min.js"></script>
+-->
 <!--
 JMSE implementation
 -->
@@ -40,7 +45,7 @@ function jsmeOnLoad() {
 
 function showEvent(event) {
    //~ var log = document.getElementById("log");
-   w2p_keywords.value =  'compound_record.smiles contains "' + event.src.smiles() + '"';
+   w2p_compound_keywords.value =  'compound.cansmiles contains "' + event.src.smiles() + '"';
 }
 </script>
 
@@ -71,7 +76,7 @@ JSME visible solo en la pagina principal
 </style>
 {{else:}} 
 <div class="content"><div id="jsme_container"></div></div>
-{{form[0][1][1].components.append(INPUT(_value='Por Estructura',_class="btn btn-default", _id="expander",_type="submit", _onclick=""))}}
+{{form[0][1][1].components.append(INPUT(_value=T('Draw Structure'),_class="btn btn-default", _id="expander",_type="submit", _onclick=""))}}
 {{pass}}
 
 
@@ -82,7 +87,6 @@ zoom imagen de compuestos
 		  $(document).ready(function(){
 			$('.img-zoom').hover(function() {
 				$(this).addClass('transition');
- 
 			}, function() {
 				$(this).removeClass('transition');
 			});
@@ -91,8 +95,10 @@ zoom imagen de compuestos
 
 
 {{=BEAUTIFY(form)}}
-
 {{if "view" in request.env.request_uri:}} 
+
+	{{=A(T('Download Structure (mol)'), _href=URL('get_mol',args=[compound_id]))}}
+	<br>
     <a id="expander_properties" 
         data-expander-target=".properties_div" 
         href="#">+ Propiedades 
@@ -108,20 +114,23 @@ zoom imagen de compuestos
             href="#">+ Referencias 
         </a>
         <div class="docs_div"> 
-            <div id="docs2">{{=BEAUTIFY(TABLE(*[TR(*rows) for rows in docs]))}}</div>
+
+            {{for doc in docs:}}
+                {{for key,value in doc.iteritems():}}
+                    {{if value is not None:}}
+                        <div id="docs2">{{=BEAUTIFY(TABLE(*[TR(B(key) + " " + value) ]))}}</div>
+                    {{pass}}
+                {{pass}}
+            </P>
+            {{pass}}
         </div>
     {{pass}}
 {{pass}}
 
-{{if request.is_local:}}
-{{=response.toolbar()}}
-{{pass}}
 
 <script>$('#expander').simpleexpand();</script>
 <script>$('#expander_properties').simpleexpand();</script>
 <script>$('#expander_docs').simpleexpand();</script>
-
-
 
 
 

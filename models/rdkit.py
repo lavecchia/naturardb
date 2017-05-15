@@ -29,9 +29,10 @@ def create_molimage(smiles,imagepath):
     check if the image was created if not it is generated, and return the path
     """
     mol = Chem.AllChem.MolFromSmiles(smiles)
-    imagepath = "applications/naturar/static/"+imagepath
-    Chem.Draw.MolToFile(mol,imagepath,size=(200,200))
-
+    #~ imagepath = "applications/naturardb/static/"+imagepath
+    Draw.MolToFile(mol,imagepath,size=(200,200))
+    #~ img = Draw.MolToImage(mol,size=(200,200))
+    #~ img.save(imagepath)
 
 def is_valid_smiles(smiles):
     '''
@@ -75,6 +76,23 @@ def calculate_descriptors(smiles):
     descriptorvaluedic = {}
     for descriptor in descriptorlst:
         descriptorvaluedic[descriptor] = getattr(Chem.Descriptors, descriptor)(molecule)
+    
+    descriptorvaluedic["CalcNumRings"] = Chem.rdMolDescriptors.CalcNumRings(molecule)
+    
+    #~ descriptorvaluedic["MolVol"]=Chem.AllChem.ComputeMolVolume(
+    nroviolations = 0
+    if descriptorvaluedic["NumHDonors"]>5:
+        nroviolations += 1
+    if descriptorvaluedic["NumHAcceptors"]>10:
+        nroviolations += 1
+    if descriptorvaluedic["ExactMolWt"]>500:
+        nroviolations += 1
+    if descriptorvaluedic["MolLogP"]>5:
+        nroviolations += 1
+    descriptorvaluedic["numro5violation"] = nroviolations
+    
+    descriptorvaluedic["molecularformula"] = Chem.rdMolDescriptors.CalcMolFormula(molecule)
+    
     
     return descriptorvaluedic
     
