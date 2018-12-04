@@ -36,12 +36,24 @@ response.menu = [
 
 if auth.is_logged_in():
     response.menu.extend(
-        [(T('Submission'), False, None, [(T('Compound'), False, URL('submission', 'submit_compound',[]))])]
+        [(T('Submission'), False, None, 
+        [
+            (T('Compound'), False, URL('submission', 'submit_compound'),[]),
+            (T('Submitted Compound'), False, URL('submission', 'compound_submitted'),[]),
+        
+        ])]
         )
     #~ response.menu.extend(
         #~ [(T('Messaging'), False, URL('messaging', 'inbox'), [])]
         #~ )
-
+    response.menu.extend(
+        [(T('Dowload'), False, None, 
+        [
+            (T('All Structures'), False, URL('compuestos', 'get_allmol'),[]),
+            (T('All except semisynthetic'), False, URL('compuestos', 'get_allnatural'),[]),
+        
+        ])]
+        )
 
 
 DEVELOPMENT_MENU = False

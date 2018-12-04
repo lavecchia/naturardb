@@ -8,31 +8,75 @@ Import DOC information from DOI using CrossRef Api
 '''
 def doi2doc(doi):
     url = "http://api.crossref.org/works/" + doi
-    response = urllib.urlopen(url)
-    data = json.load(response)
+    try:
+        response = urllib.urlopen(url)
+        data = json.load(response)
+    except:
+        pass
     doc = {}
-    doc['journal']=data['message']['container-title'][0]
-    doc['year']=datetime.strptime(str(data['message']['deposited']['date-parts'][0][0]), '%Y')
-    doc['volume']=data['message']['volume']
-    doc['issue']=data['message']['issue']
+    try:
+        doc['journal']=data['message']['container-title'][0]
+    except:
+        doc['journal']="-"
+        
+    try:
+        doc['year']=datetime.strptime(str(data['message']['deposited']['date-parts'][0][0]), '%Y')
+    except:
+        doc['year']=0000
+        
+    try:
+        doc['volume']=data['message']['volume']
+    except:
+        doc['volume']=0
+        
+    try:
+        doc['issue']=data['message']['issue']
+    except:
+        doc['issue']=0
+        
+    try:
+        pages = data['message']['page'].split("-")
+        doc['firstpage']=pages[0]
+        doc['lastpage']=pages[1]
+    except:
+        doc['firstpage']=0
+        doc['lastpage']=0
     
-    pages = data['message']['page'].split("-")
-    doc['firstpage']=pages[0]
-    doc['lastpage']=pages[1]
+    try:           
+        doc['doi']=data['message']['DOI']
+    except:
+        doc['doi']=doi
     
-    doc['doi']=data['message']['DOI']
-    doc['issn']=data['message']['ISSN']
+    try:
+        doc['issn']=data['message']['ISSN']
+    except:
+        doc['issn']="0"
+        
     #~ Field('pubmed_id'),
-    doc['title']=data['message']['title'][0]    
-    doc['doctype']=data['message']['type']
+    try:
+        doc['title']=data['message']['title'][0]    
+    except:
+        doc['title']="-"
     
-    authorlst= []
-    for iauthor in data['message']['author']:
-        authorlst.append(iauthor['given'] + " " + iauthor['family'])
-    doc['authors']=",".join(authorlst)
+    try:
+        doc['doctype']=data['message']['type']
+    except:
+        doc['doctype']="-"
+    
+    try:
+        authorlst= []
+        for iauthor in data['message']['author']:
+            authorlst.append(iauthor['given'] + " " + iauthor['family'])
+        doc['authors']=",".join(authorlst)
+    except:
+        doc['authors']="-"
+        
     
     #~ Field('abstract', type='text'),
-    doc['url']=data['message']['URL']
+    try:
+        doc['url']=data['message']['URL']
+    except:
+        doc['url']="-"
     return doc
     
 

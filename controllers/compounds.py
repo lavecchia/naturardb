@@ -24,7 +24,7 @@ def buscar():
     db.compound.id.readable = True
     db.compound.id.writeable = False
  
-    #~ db.compound.inchikey.readable=False
+
     form = SQLFORM.grid(
         query=db.compound,
         formname="compound",
@@ -36,13 +36,10 @@ def buscar():
         #~ searchable= dict(cansmiles=True, synonym=True, extract=False),
         links=[dict(header=T('Image'), body = lambda row: 
         DIV(A(IMG(_src=URL('.',row.imagepath), 
-        _width=imagewidth, _height=imageheight),_href=URL("buscar",args=["view/compound/%i"%(row.id)])),_class="img-zoom"))],
-        fields=[db.compound.id, db.compound.cansmiles, db.compound.synonym, db.compound.semisynthetic, db.compound.structuraluncertainty, db.compound.source, db.compound.imagepath]
-        )
+        _width=imagewidth, _height=imageheight),_href=URL("buscar",args=["view/compound/%i"%(row.id)])),_class="img-zoom"))])
         
     if request.args(0):
         if "view" in request.args(0) or "edit" in request.args(0):
-
             compound_id = request.args(2)
             # Properties selection
             table = db(db.compoundproperty.compound_id==compound_id).select(

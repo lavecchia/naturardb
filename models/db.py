@@ -18,7 +18,11 @@ from gluon.dal import SQLCustomType
 ## once in production, remove reload=True to gain full speed
 myconf = AppConfig(reload=True)
 
-
+# define mol type
+mol = SQLCustomType(
+    type ='text',
+    native ='mol',
+    )
 
 #~ if not request.env.web2py_runtime_gae:
     #~ ## if NOT running on Google App Engine use SQLite or other DB
@@ -32,14 +36,9 @@ myconf = AppConfig(reload=True)
     #~ ## from gluon.contrib.memdb import MEMDB
     #~ ## from google.appengine.api.memcache import Client
     #~ ## session.connect(request, response, db = MEMDB(Client()))
-    #~ 
-db = DAL("postgres://fito:123456@localhost:5432/naturardb")
-#~ db = DAL("postgres://fito:123456@localhost:5432/naturardb", migrate=True, fake_migrate=True,)
-#~ db = DAL("postgres://fito:123456@localhost/naturardb", migrate=False, fake_migrate=True,)
 
-#~ db = DAL("postgres://fito:123456@localhost:5432/naturardb", migrate=True)
 
-#~ db = DAL("postgres://fito:123456@localhost/naturardb", lazy_tables=True)
+db = DAL("PostgreSQL DATABASE") # CHANGE ME!
 
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
@@ -75,6 +74,7 @@ auth.settings.extra_fields['auth_user']= [
     Field('address', type='string', label=T('Address')),
     Field('phone', type='string', label=T('Phone')),
     Field('picture', type='upload', label=T('Picture')),
+    #~ Field('researchgroup', type='string', label=T('Research Group')),   
     Field('rearchdescription', type='text', label=T('Research Description')),
     Field('additionalinfo', type='text', label=T('Additional Information')),
     ]
@@ -89,6 +89,9 @@ mail = auth.settings.mailer
 mail.settings.server = 'logging' if request.is_local else myconf.take('smtp.server')
 mail.settings.sender = myconf.take('smtp.sender')
 mail.settings.login = myconf.take('smtp.login')
+mail.settings.tls = True
+mail.settings.ssl = True
+print mail.settings
 
 ## configure auth policy
 auth.settings.registration_requires_verification = False
@@ -149,6 +152,32 @@ db.define_table('location',
     )
 
 
+'''
+Compound submission, create a temporal compound and then, if all are right, it is approved.
+'''
+db.define_table('compoundsubmission',
+	auth.signature,
+	Field('inputsmiles', type='string',label=T('Smiles'), comment=T('Only necessary if you do not have MOL structure')),
+	Field('inchi', type='string', readable=False, writable=False),
+    Field('inchikey', type='string', readable=False, writable=False),
+    Field('created_on', 'datetime', default=request.now),
+    Field('isosmiles', type='string', readable=False, writable=False, label=T('Isomeric Smiles')),
+    Field('cansmiles', type='string', readable=False, writable=False, label=T('Canonical Smiles')),
+    Field('molstructure', type='text', readable=False, writable=False),
+    Field('rdkitstructure', type=mol, readable=False, writable=False),
+	Field('state', type='string', readable=False, writable=False),
+    Field('synonym', type='list:string', readable=True, writable=True, label=T('Names'), comment=T('Click on + to add synonyms')),
+    Field('semisynthetic',type='boolean', readable=True, writable=True, label=T('Semi-synthetic'), comment=T('Molecule is semi-synthetic?')),
+    Field('structuraluncertainty', type='boolean', readable=True, writable=True, label=T('Struc. Uncertainty'), comment=T('Is there some experimental uncertainty about structure determination?')),
+    Field('imagepath', type='text', readable=False, writable=False,default='static/images_molecule/noimage.png'),
+    Field('approved', type='boolean', default=False, readable=False, writable=False),
+    Field('source', type='string', readable=True, writable=True, label=T("Natural Source"), comment=T('Natural source where was obtained the compound')),
+    Field('addinfo', type='text', readable=True, writable=True, label=T('Additional Information'), comment=T('Any comment that you consider important')),
+    #~ fake_migrate=True, 
+    )
+
+
+
 # --------------------------------------------------------------------
 # DOCS
 # --------------------------------------------------------------------
@@ -158,23 +187,45 @@ Store bibliographic information, this can be obtained from Crossref API
 '''
 db.define_table('doc', 
     auth.signature,
-    Field('journal', type='string'),
-    Field('year', type='datetime', requires = IS_DATE(format=('%Y'))),
-    Field('volume', type='integer'),
-    Field('issue', type='integer'),
-    Field('firstpage', type='integer'),
-    Field('lastpage', type='integer'),
-    Field('doi', type='string'),
-    Field('isbn10', type='string'),
-    Field('issn', type='string'),
-    Field('pubmed_id'),
-    Field('title', type='text'),
-    Field('doctype', type='string'),
-    Field('authors'),
-    Field('abstract', type='text'),
-    Field('url', type='text'),
-    )
+    Field('journal', type='string', label=T('Journal')),
+    Field('year', type='datetime', requires = IS_DATE(format=('%Y')), label=T('Year')),
+    Field('volume', type='integer',label=T('Volume')),
+    Field('issue', type='integer',label=T('Issue')),
+    Field('firstpage', type='integer', label=T('Fist Page')),
+    Field('lastpage', type='integer', label=T('Last Page')),
+    Field('doi', type='string', label=T('DOI')),
+    Field('isbn10', type='string', label=T('ISBN10')),
+    Field('issn', type='string',label=T('ISSN')),
+    Field('pubmed_id',label=T('PubMed ID')),
+    Field('title', type='text', label=T('Title')),
+    Field('doctype', type='string', label=T('Doctype')),
+    Field('authors', label=T('Authors')),
+    Field('abstract', type='text', label=T('Abstract')),
+    Field('url', type='text', label=T('URL')),
+    #~ migrate=True, fake_migrate=False,
+    ) 
 
+db.define_table('doctmp', 
+    auth.signature,
+    Field('journal', type='string', label=T('Journal')),
+    Field('year', type='datetime', requires = IS_DATE(format=('%Y')), label=T('Year')),
+    Field('volume', type='integer',label=T('Volume')),
+    Field('issue', type='integer',label=T('Issue')),
+    Field('firstpage', type='integer', label=T('Fist Page')),
+    Field('lastpage', type='integer', label=T('Last Page')),
+    Field('doi', type='string', label=T('DOI')),
+    Field('isbn10', type='string', label=T('ISBN10')),
+    Field('issn', type='string',label=T('ISSN')),
+    Field('pubmed_id',label=T('PubMed ID')),
+    Field('title', type='text', label=T('Title')),
+    Field('doctype', type='string', label=T('Doctype')),
+    Field('authors', label=T('Authors')),
+    Field('abstract', type='text', label=T('Abstract')),
+    Field('url', type='text', label=T('URL')),
+    Field('compoundsubmission_id', 'reference compoundsubmission'),
+    Field('approved', type='boolean', default=False, readable=False, writable=False),
+    #~ Field('date_made', 'datetime', default = request.now),
+    )
     
 
 # --------------------------------------------------------------------
@@ -188,16 +239,44 @@ db.define_table('compound',
     auth.signature,
     #~ Field('compoundname', requires=IS_NOT_EMPTY()),
     #~ Field('iupacname', type='string'),
-    Field('inchi', type='string', readable=True, writable=False),
-    Field('inchikey', type='string', readable=True, writable=False),
+    Field('inchi', type='string', readable=True, writable=False, label=T('InChI')),
+    Field('inchikey', type='string', readable=True, writable=False, label=T('InChIKey')),
+    Field('isosmiles', type='string', readable=True, writable=False, label=T('Isomeric Smiles')),
+    Field('cansmiles', type='string', readable=True, writable=False, label=T('Canonical Smiles')),
+    Field('imagepath', type='text', readable=False, writable=False, default='static/images_molecule/noimage.png'),
+    Field('approved', type='boolean', readable=False, writable=False), 
+    Field('synonym', type='list:string', readable=True, writable=False, label=T('Names')),
+    Field('semisynthetic',type='boolean', readable=True, writable=True, label=T('Semi-synthetic')),
+    Field('structuraluncertainty', type='boolean', readable=True, writable=True, label=T('Struc. Uncert.')),
+    Field('source', type='string', readable=True, writable=True, label=T("Source")),
+    Field('addinfo', type='text', readable=True, writable=True, label=T('Additional Information')),
+    #~ format='c%(id)i-%(name)s',
+    migrate=True, fake_migrate=False,
+    #~ migrate=False, fake_migrate=True
+
+    )
+
+
+
+
+db.define_table('compoundtmp', 
+    auth.signature,
+    #~ Field('compoundname', requires=IS_NOT_EMPTY()),
+    #~ Field('iupacname', type='string'),
+    Field('inchi', type='string', readable=True, writable=False, label=T('InChI')),
+    Field('inchikey', type='string', readable=True, writable=False, label=T('InChIKey')),
     Field('isosmiles', type='string', readable=True, writable=False, label=T('Isomeric Smiles')),
     Field('cansmiles', type='string', readable=True, writable=False, label=T('Canonical Smiles')),
     Field('imagepath', type='text', readable=False, writable=False, default='static/images_molecule/noimage.png'),
     Field('addinfo', type='text', readable=False, writable=False), 
     Field('approved', type='boolean', readable=False, writable=False), 
     Field('synonym', type='list:string', readable=True, writable=False, label=T('Names')),
+    Field('semisynthetic',type='boolean', readable=True, writable=True, label=T('Semi-synthetic')),
+    Field('structuraluncertainty', type='boolean', readable=True, writable=True, label=T('Structural Uncertainty')),
     #~ format='c%(id)i-%(name)s',
     )
+    
+
     
 '''
 Many to many table relationship: Docs and Compounds
@@ -208,6 +287,15 @@ db.define_table('compound_doc',
     Field('doc_id', 'reference doc'),
     )
 
+db.define_table('compoundtmp_doctmp',
+    auth.signature,
+    Field('compound_id', 'reference compound'),
+    Field('doc_id', 'reference doctmp'),
+    Field('approved', type='boolean', default=False, readable=False, writable=False),
+    Field('date_made', 'datetime', default = request.now),
+    )
+     
+
 '''
 Structures (rdkit mol type) of compounds
 '''
@@ -216,16 +304,23 @@ Structures (rdkit mol type) of compounds
     #~ molstructure MOL, \
     #~ compound_id int references compound(id), \
     #~ CONSTRAINT structure_pk PRIMARY KEY (id));')
-mol = SQLCustomType(
-    type ='text',
-    native ='mol',
-    )
+
 
 db.define_table('rdkitstructure',
     auth.signature,
     Field('rdkitstructure', type=mol),
     Field('compound_id', 'reference compound'),
     )
+    
+db.define_table('rdkitstructuretmp',
+    auth.signature,
+    Field('rdkitstructure', type=mol),
+    Field('compound_id', 'reference compoundtmp'),
+    Field('approved', type='boolean', default=False, readable=False, writable=False),
+    Field('date_made', 'datetime', default = request.now),
+    )
+     
+
 
 '''
 Structures (mol file type) of compounds
@@ -234,6 +329,12 @@ db.define_table('molstructure',
     auth.signature,
     Field('molstructure', type='text'),
     Field('compound_id', 'reference compound'),
+    )
+    
+db.define_table('molstructuretmp',
+    auth.signature,
+    Field('molstructure', type='text'),
+    Field('compound_id', 'reference compoundtmp'),
     )
 
 '''
@@ -281,6 +382,13 @@ db.define_table('classification',
     Field('classificationdescription', type='text'),
     )
 
+db.define_table('classificationtmp',
+    auth.signature,
+    Field('classificationname', type='string'),
+    Field('classificationdescription', type='text'),
+    )
+ 
+
 '''
 Many to many table relationship: Classification and Compounds
 '''
@@ -290,11 +398,24 @@ db.define_table('compound_classification',
     Field('classification_id', 'reference classification'),
     )
     
+db.define_table('compoundtmp_classificationtmp',
+    auth.signature,
+    Field('compound_id', 'reference compoundtmp'),
+    Field('classification_id', 'reference classificationtmp'),
+    )
+    
 '''
 List of compound class,  
 fuctional groups, ej aminas, sulfonamidas, etc.
 '''
 db.define_table('chemicalclass',
+    auth.signature,
+    Field('classname_en', type='string'),
+    Field('classname_es', type='string'),
+    Field('classdescription', type='text'),
+    )
+    
+db.define_table('chemicalclasstmp',
     auth.signature,
     Field('classname_en', type='string'),
     Field('classname_es', type='string'),
@@ -308,6 +429,12 @@ db.define_table('compound_chemicalclass',
     auth.signature,
     Field('compound_id', 'reference compound'),
     Field('chemicalclass_id', 'reference chemicalclass'),
+    )
+    
+db.define_table('compoundtmp_chemicalclasstmp',
+    auth.signature,
+    Field('compound_id', 'reference compoundtmp'),
+    Field('chemicalclass_id', 'reference chemicalclasstmp'),
     )
     
 '''
@@ -343,6 +470,8 @@ db.define_table('compoundproperty',
     Field('numo', type='integer'),
     Field('nums', type='integer'),
     Field('numro5violation', type='integer', label=T('Lipinski rule violations')),
+    #~ migrate=True, 
+
     )
 
 '''
@@ -353,6 +482,13 @@ db.define_table('extraproperty',
     Field('extrapropertyname_en', type='string'),
     Field('extrapropertyname_es', type='string'),
     )
+    
+db.define_table('extrapropertytmp', 
+    auth.signature,
+    Field('extrapropertyname_en', type='string'),
+    Field('extrapropertyname_es', type='string'),
+    )
+
 
 '''
 Many to many table relationship: Extraproperty and Compounds,
@@ -363,6 +499,14 @@ db.define_table('compound_extraproperty',
     Field('extraproperty_id', 'reference extraproperty'),
     Field('extrapropertyvalue')
     )
+    
+db.define_table('compoundtmp_extrapropertytmp',
+    auth.signature,
+    Field('compound_id', 'reference compoundtmp'),
+    Field('extraproperty_id', 'reference extraproperty'),
+    Field('extrapropertyvalue')
+    )
+
 
 
 # --------------------------------------------------------------------
@@ -387,6 +531,20 @@ db.define_table('source',
     Field('dbname', type='string'),
     Field('idfromdb', type='string'),
     )
+    
+db.define_table('sourcetmp', 
+    auth.signature,
+    Field('scientificname', type='string'),
+    Field('sourcekingdom', type='string'),
+    Field('sourcefamily', type='string'),
+    Field('sourcegenus', type='string'),
+    Field('sourcespecies', type='string'),
+    Field('variety', type='string'),
+    Field('ethnomedicinalinfo', type='text'),
+    Field('dbname', type='string'),
+    Field('idfromdb', type='string'),
+    )
+
 
 '''
 Images of sources
@@ -397,6 +555,13 @@ db.define_table('sourceimage',
     Field('sourceimage', type='string'),
     Field('credit', type='string'),
     )
+    
+db.define_table('sourceimagetmp',
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
+    Field('sourceimage', type='string'),
+    Field('credit', type='string'),
+    )
 
 '''
 Native names of a source
@@ -404,6 +569,13 @@ Native names of a source
 db.define_table('nativename',
     auth.signature,
     Field('source_id', 'reference source'),
+    Field('nativename', type='string'),
+    Field('culture', type='string'),
+    )
+
+db.define_table('nativenametmp',
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
     Field('nativename', type='string'),
     Field('culture', type='string'),
     )
@@ -426,6 +598,12 @@ db.define_table('medicinal',
     Field('medicinaluse_es', type='string'),
     )
 
+db.define_table('medicinaltmp',
+    auth.signature,
+    Field('medicinaluse_en', type='string'),
+    Field('medicinaluse_es', type='string'),
+    )
+
 '''
 Many to many table relationship: Medicinal Uses and Sources
 '''
@@ -433,6 +611,12 @@ db.define_table('source_medicinal',
     auth.signature,
     Field('source_id', 'reference source'),
     Field('medicinal_id', 'reference medicinal'),
+    )
+    
+db.define_table('sourcetmp_medicinaltmp',
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
+    Field('medicinal_id', 'reference medicinaltmp'),
     )
     
 '''
@@ -443,6 +627,13 @@ db.define_table('food',
     Field('fooduse_en', type='string'),
     Field('fooduse_es', type='string'),
     )
+    
+db.define_table('foodtmp',
+    auth.signature,
+    Field('fooduse_en', type='string'),
+    Field('fooduse_es', type='string'),
+    )
+
 
 '''
 Many to many table relationship: Food Uses and Sources
@@ -452,12 +643,23 @@ db.define_table('source_food',
     Field('source_id', 'reference source'),
     Field('food_id', 'reference food'),
     )
+    
+db.define_table('sourcetmo_foodtmp',
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
+    Field('food_id', 'reference foodtmp'),
+    )
 
 
 '''
 Other Uses
 '''
 db.define_table('otheruse',
+    auth.signature,
+    Field('otherusename', type='string'),
+    )
+
+db.define_table('otherusetmp',
     auth.signature,
     Field('otherusename', type='string'),
     )
@@ -471,12 +673,24 @@ db.define_table('source_otheruse',
     Field('otheruse_id', 'reference otheruse'),
     )
 
+db.define_table('source_otherusetmp',
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
+    Field('otheruse_id', 'reference otherusetmp'),
+    )
+
 '''
 Many to many table relationship: Location and Sources
 '''
 db.define_table('source_location',
     auth.signature,
     Field('source_id', 'reference source'),
+    Field('location_id', 'reference location'),
+    )
+    
+db.define_table('sourcetmp_locationtmp',
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
     Field('location_id', 'reference location'),
     )
 
@@ -487,6 +701,12 @@ db.define_table('source_doc',
     auth.signature,
     Field('source_id', 'reference source'),
     Field('doc_id', 'reference doc'),
+    )
+    
+db.define_table('sourcetmp_doctmp',
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
+    Field('doc_id', 'reference doctmp'),
     )
      
      
@@ -510,6 +730,18 @@ db.define_table('message',
 Research groups
 '''
 db.define_table('researchgroup',
+    auth.signature,
+    Field('reseachname', type='string'),
+    Field('institution', type='string'),
+    Field('webpage', type='string'),
+    Field('email', type='string'),
+    Field('telephone', type='string'),
+    Field('address', type='string'),
+    Field('location_id', 'reference location'),
+    Field('logo', type='upload'),
+    )
+    
+db.define_table('researchgrouptmp',
     auth.signature,
     Field('reseachname', type='string'),
     Field('institution', type='string'),
@@ -561,6 +793,12 @@ db.define_table('partused',
     Field('partname_en'),
     Field('partname_es'),
     )
+    
+db.define_table('partusedtmp',
+    auth.signature,
+    Field('partname_en'),
+    Field('partname_es'),
+    )
 
 '''
 Main table of extract
@@ -573,6 +811,16 @@ db.define_table('extract',
     Field('extractpreparation', type='text'),
     format='%(extract_name)s',
     )
+    
+db.define_table('extracttmp', 
+    auth.signature,
+    Field('source_id', 'reference sourcetmp'),
+    Field('location_id', 'reference location'),
+    Field('partused_id', 'reference partusedtmp'),
+    Field('extractpreparation', type='text'),
+    format='%(extract_name)s',
+    )
+
 
 '''
 Many to many table relationship: Docs and Extract
@@ -582,6 +830,13 @@ db.define_table('extract_doc',
     Field('extract_id', 'reference extract'),
     Field('doc_id', 'reference doc'),
     )
+    
+db.define_table('extracttmp_doctmp',
+    auth.signature,
+    Field('extract_id', 'reference extracttmp'),
+    Field('doc_id', 'reference doctmp'),
+    )
+
 
 '''
 Many to many table relationship: Compound and Extract
@@ -590,6 +845,13 @@ db.define_table('compound_extract',
     auth.signature,
     Field('extract_id', 'reference extract'),
     Field('compound_id', 'reference compound'),
+    Field('compoundamount', type='double'),
+    )
+    
+db.define_table('compoundtmp_extracttmp',
+    auth.signature,
+    Field('extract_id', 'reference extracttmp'),
+    Field('compound_id', 'reference compoundtmp'),
     Field('compoundamount', type='double'),
     )
 
@@ -602,6 +864,13 @@ db.define_table('compound_extract',
 List of assays
 '''
 db.define_table('assay',
+    auth.signature,
+    Field('assayname', type='string'),
+    Field('assaydescription', type='text'),
+    Field('pubchecbioassay_id'),
+    )
+    
+db.define_table('assaytmp',
     auth.signature,
     Field('assayname', type='string'),
     Field('assaydescription', type='text'),
@@ -621,6 +890,17 @@ db.define_table('extract_assay',
     Field('cytotoxicity', type='double'),
     Field('sideEffects', type='text'),
     )
+    
+db.define_table('extracttmp_assaytmp',
+    auth.signature,
+    Field('extract_id', 'reference extracttmp'),
+    Field('compound_id', 'reference compoundtmp'),
+    Field('compoundamount', type='double'),    
+    Field('inhibition', type='double'),
+    Field('activity', type='double'),
+    Field('cytotoxicity', type='double'),
+    Field('sideEffects', type='text'),
+    )
 
 '''
 Many to many table relationship: Docs and Assay
@@ -630,11 +910,22 @@ db.define_table('assay_doc',
     Field('assay_id', 'reference assay'),
     Field('doc_id', 'reference doc'),
     )
+    
+db.define_table('assaytmp_doctmp',
+    auth.signature,
+    Field('assay_id', 'reference assaytmp'),
+    Field('doc_id', 'reference doctmp'),
+    )
 
 '''
 List of assay targets
 '''
 db.define_table('target',
+    auth.signature,
+    Field('targetname', type='string'),
+    )
+    
+db.define_table('targettmp',
     auth.signature,
     Field('targetname', type='string'),
     )
@@ -648,28 +939,13 @@ db.define_table('assay_target',
     Field('target_id', 'reference target'),
     )
 
-
-# --------------------------------------------------------------------
-# COMPOUND SUBMISSION
-# --------------------------------------------------------------------
-'''
-Compound submission, create a temporal compound and then, if all are right, it is approved.
-'''
-db.define_table('compoundsubmission',
-	auth.signature,
-	Field('inputsmiles', type='string'),
-	Field('inchi', type='string', readable=False, writable=False),
-    Field('inchikey', type='string', readable=False, writable=False),
-    Field('isosmiles', type='string', readable=False, writable=False, label=T('Isomeric Smiles')),
-    Field('cansmiles', type='string', readable=False, writable=False, label=T('Canonical Smiles')),
-    Field('molstructure', type='text', readable=False, writable=False),
-    Field('rdkitstructure', type=mol, readable=False, writable=False),
-	Field('state', type='string', readable=False, writable=False),
-    Field('addinfo', type='text', readable=False, writable=False),
-    Field('synonym', type='list:string', readable=True, writable=True, label=T('Names')),
-    Field('imagepath', type='text', readable=False, writable=False),
-    Field('approved', type='boolean', default=False, readable=False, writable=False),
+db.define_table('assaytmp_targettmp',
+    auth.signature,
+    Field('assay_id', 'reference assaytmp'),
+    Field('target_id', 'reference targettmp'),
     )
+
+
 
 #~ '''
 #~ Store temporal synonym names of submited compounds
@@ -680,30 +956,7 @@ db.define_table('compoundsubmission',
     #~ Field('compoundsubmission_id', 'reference compoundsubmission'),
     #~ )  
 
-'''
-Store temporal bibliographic information, this can be obtained from Crossref API
-'''
-db.define_table('tmpdoc', 
-    auth.signature,
-    Field('journal', type='string'),
-    Field('year', type='datetime', requires = IS_DATE(format=('%Y'))),
-    Field('volume', type='integer'),
-    Field('issue', type='integer'),
-    Field('firstpage', type='integer', label=T('first page')),
-    Field('lastpage', type='integer', label=T('last page')),
-    Field('doi', type='string'),
-    Field('isbn10', type='string'),
-    Field('issn', type='string'),
-    Field('pubmed_id'),
-    Field('title', type='text'),
-    Field('doctype', type='string', label=T('document type')),
-    Field('authors'),
-    Field('abstract', type='text'),
-    Field('url', type='text'),
-    Field('compoundsubmission_id', 'reference compoundsubmission'),
-    Field('approved', type='boolean', default=False, readable=False, writable=False),
-    )
-    
+
 
 
 ## after defining tables, uncomment below to enable auditing
